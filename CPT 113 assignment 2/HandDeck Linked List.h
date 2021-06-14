@@ -19,9 +19,16 @@ private:
 
 public:
 	//constructor
-	LinkedList()
+	HandDeckLinkedList()
 	{
 		head = nullptr;
 	}
+	//~destructor
+	~HandDeckLinkedList();
+
+	//linked list operations
+	void appendNode(T);
+	void deleteNode(T);
+
 };
 #endif // !HANDDECKLINKEDLIST_H
