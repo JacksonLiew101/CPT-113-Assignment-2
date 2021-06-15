@@ -29,10 +29,10 @@ public:
 	bool matchCard(C, C);	// done
 	void playCard(C, C&);	//	done
 	void drawCard(C);		// done
-	void draw2Cards(C&); // at main function
-	void draw4Cards(C&);// at main function
+	//void draw2Cards(C&); // at main function
+	//void draw4Cards(C&);// at main function
 	void showHandCards(); // done
-	void initialHandCards(); // draw 5 cards/ at main function
+	//void initialHandCards(); // draw 5 cards/ at main function
 	//bool checkCardValidity(C);  no need this function
 	void showValidCard(C); // done
 	void setHandDeckName(string);
@@ -94,6 +94,7 @@ bool HandDeckLinkedList<C>::matchCard(C search_card, C this_card)
 }
 
 // the card will be pass to a temp class obj in the main
+// both of the card must be from different objects
 template<class C>
 void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 {

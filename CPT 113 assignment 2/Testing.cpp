@@ -59,3 +59,55 @@
 	discardpile1.displayStack();
 	cout << discardpile1.getActionStatement() << endl;
 */
+
+// Testing GroupDoubleCircularLinkedList Class
+/*
+	GroupDoubleCircularLinkedList<Group, Card> GroupsLinkedList;
+	Group temp_group;
+	string player1;
+	string player2;
+	for(int i =0; i<3; i++)
+	{
+		cout << "Enter the first player's name for team " << i + 1 << " : ";
+		cin >> player1;
+		cout << "Enter the second player's name for team " << i + 1 << " : ";
+		cin >> player2;
+		temp_group.setPlayer1Name(player1);
+		temp_group.setPlayer2Name(player2);
+		if(i==0)
+		{
+			temp_group.setGroupName("A");
+		}
+		else if(i==1)
+		{
+			temp_group.setGroupName("B");
+		}
+		else if(i==2)
+		{
+			temp_group.setGroupName("C");
+		}
+		GroupsLinkedList.addNewGroupAtEnd(temp_group);
+	}
+	GroupsLinkedList.displayList();
+	cout << endl;
+	//GroupsLinkedList.RemoveGroup(temp_group);
+	GroupsLinkedList.displayList();
+	cout << endl;
+	GroupsLinkedList.NextGroup();
+	temp_group = GroupsLinkedList.getCurrentNode();
+	cout << temp_group.getGroupName() << ", " << temp_group.getPlayer1Name() << ", " << temp_group.getPlayer2Name();
+	cout << endl;
+	GroupsLinkedList.reverse();
+	GroupsLinkedList.NextGroup();
+	temp_group = GroupsLinkedList.getCurrentNode();
+	cout << "After reverse: " << endl;
+	cout << temp_group.getGroupName() << ", " << temp_group.getPlayer1Name() << ", " << temp_group.getPlayer2Name();
+	cout << endl;
+	GroupsLinkedList.skipTurn();
+	temp_group = GroupsLinkedList.getCurrentNode();
+	cout << "After skipping: " << endl;
+	cout << temp_group.getGroupName() << ", " << temp_group.getPlayer1Name() << ", " << temp_group.getPlayer2Name();
+	cout << endl;
+*/
+
+// Testing HandDeckLinkedList Class

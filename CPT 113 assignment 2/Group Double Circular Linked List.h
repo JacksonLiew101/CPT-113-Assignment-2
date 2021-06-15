@@ -1,5 +1,6 @@
 #ifndef GROUPDOUBLECIRCULARLINKEDLIST_H
 #define GROUPDOUBLECIRCULARLINKEDLIST_H
+#include"Group.h"
 #include"HandDeck Linked List.h"
 #include"Discard Pile Stack.h"
 
@@ -10,7 +11,6 @@ class GroupDoubleCircularLinkedList
 private:
 	struct GroupNode
 	{
-		HandDeckLinkedList<C> handDeck = new HandDeckLinkedList;
 		G value;
 		GroupNode* next;
 		GroupNode* previous;
@@ -26,7 +26,8 @@ public:
 	// destructor
 	~GroupDoubleCircularLinkedList();
 
-	void isEmpty();				// done
+	bool isEmpty();				
+	void displayList();
 	void addNewGroupAtEnd(G);	// done
 	void NextGroup();			// done
 	void RemoveGroup(G&);		// done
@@ -35,12 +36,13 @@ public:
 	bool checkWinner(); // detect it at the main function
 	void skipTurn();			// done
 	void reverse();				// done, probably need to only keep reverse() or setFlagReverse
-	string getGroupNameFromList();
+	//string getGroupNameFromList(); // done, probably need to removed
+	G getCurrentNode();
 };
 
 //constructor
 template<class G, class C>
-GroupDoubleCircularLinkedList<G,C>::GroupDoubleCircularLinkedList() :HandDeckLinkedList<C>()
+GroupDoubleCircularLinkedList<G,C>::GroupDoubleCircularLinkedList()
 {
 	head = nullptr; 
 	current = nullptr;
@@ -56,14 +58,33 @@ GroupDoubleCircularLinkedList<G,C>::~GroupDoubleCircularLinkedList()
 
 	for (int i = 0; i < no_of_group; i++) {
 		Node_ptr = head;
-		head->next;
-		delete nodePtr;
+		head = head->next;
+		delete Node_ptr;
 		no_of_group--;
 	}
 	head = nullptr;
-	end = nullptr;
 	current = nullptr;
 }
+
+template<class G, class C>
+bool GroupDoubleCircularLinkedList<G, C>::isEmpty() {
+	return head == nullptr;
+}
+
+template<class G, class C>
+void GroupDoubleCircularLinkedList<G, C>::displayList() {
+	GroupNode* Node_ptr = nullptr;
+	Node_ptr = head;
+
+	for (int i = 0; i < no_of_group; i++, Node_ptr = Node_ptr->next) {
+		cout << Node_ptr->value.getScore() << ", "
+			<< Node_ptr->value.getPlayer1Name() << ", "
+			<< Node_ptr->value.getPlayer2Name() << ", "
+			<< Node_ptr->value.getGroupName() << endl;
+	}
+
+}
+
 
 template<class G, class C>
 void GroupDoubleCircularLinkedList<G, C>::addNewGroupAtEnd(G new_group) {
@@ -188,11 +209,16 @@ void GroupDoubleCircularLinkedList<G, C>::reverse() {
 	setFlagReverse();
 }
 
-
+/*
 template<class G, class C>
 string GroupDoubleCircularLinkedList<G, C>::getGroupNameFromList()
 {
 	return current->value.getGroupName();
 }
+*/
 
+template<class G, class C>
+G GroupDoubleCircularLinkedList<G, C>::getCurrentNode() {
+	return current->value;
+}
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H
