@@ -23,17 +23,17 @@ private:
 	
 public:
 	//constructor
-	DrawPileStack();
+	DrawPileStack(); // done
 	//destructor
 	~DrawPileStack(); // done
 	bool isEmpty(); // done
 	void pushCard(C); // done
 	void popCard(C&); // done
-	void generateDeck();
-	void swap(int*, int*);
-	void randomize(int arr[], int n);
-	void displayStack();
-	void setStackCard(string, string,int);
+	void generateDeck(); // done
+	void swap(int*, int*); // done
+	void randomize(int arr[], int n); // done
+	void displayStack(); // done
+	void setStackCard(string, string,int); // done
 };
 
 template <class C>
@@ -59,6 +59,7 @@ void DrawPileStack<C>::displayStack()
 
 template <class C>
 DrawPileStack<C>::DrawPileStack() {
+	top = nullptr;
 	generateDeck();
 }
 

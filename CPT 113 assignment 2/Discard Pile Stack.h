@@ -25,6 +25,7 @@ public:
 
 	// Stack operations
 	bool isEmpty(); // done
+	void displayStack();
 	void push(C); // done
 	C peek(); // done
 	void setActionStatement(string action); // done
@@ -60,6 +61,18 @@ bool DiscardPileStack<C>::isEmpty() {
 }
 
 template<class C>
+void DiscardPileStack<C>::displayStack()
+{
+	CardNode* Node_ptr;
+	Node_ptr = top;
+
+	while (!(Node_ptr == nullptr)) {
+		Node_ptr->value.displayCard();
+		Node_ptr = Node_ptr->next;
+	}
+}
+
+template<class C>
 void DiscardPileStack<C>::push(C new_card)
 {
 	// allocate a new node
@@ -69,25 +82,35 @@ void DiscardPileStack<C>::push(C new_card)
 	New_node->next = nullptr;
 	string Check_value = new_card.getValue();
 
-	if (isEmpty()) {
-		// This means it will be the first node, make top point to new node
-		top = New_node;
-	}
-	else {
-		// Make new pointer of new node point to the current top
-		New_node->next = top;
-
-		// Update top to point to new node
-		top = New_node;
-	}
 
 	// update action statement according to the new card
-	if (newcard.compareStrings(newcard.getValue(),"Skip") || newcard.compareStrings(newcard.getValue(),"Reverse") ||newcard.compareStrings(newcard.getValue(),"Draw Two" newcard.compareStrings(newcard.getValue(),"Wild") || newcard.compareStrings(newcard.getValue(),"Wild Draw Four")) {
+	// only push stack if the new card is number card
+	if (new_card.compareStrings(Check_value, "Skip") || new_card.compareStrings(Check_value, "Reverse") || new_card.compareStrings(Check_value, "Draw Two") || new_card.compareStrings(Check_value, "Wild") || new_card.compareStrings(Check_value, "Wild Draw Four"))
+	{
 		setActionStatement(Check_value);
+		top->value.setColour(new_card.getColour()); // override the top colour with the action card colour
 	}
-	else {
+	else // if it is a number card
+	{
 		setActionStatement("");
+		
+		
+		if (isEmpty()) {
+			// This means it will be the first node, make top point to new node
+			top = New_node;
+		}
+		else {
+			// Make new pointer of new node point to the current top
+			New_node->next = top;
+
+			// Update top to point to new node
+			top = New_node;
+		}
 	}
+
+	
+
+	
 }
 
 template<class C>
