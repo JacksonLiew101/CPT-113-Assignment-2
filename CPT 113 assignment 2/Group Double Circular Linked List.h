@@ -146,13 +146,20 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 	}
 	else {
 		Node_ptr = current;
-		Previous_node = current->previous;
+		Previous_node = Node_ptr->previous;
+		Previous_node->next = Node_ptr->next;
 
-
-		// Linking
+		// if the node needed to be deleted is someway in the middle
+		if (Node_ptr->next != head) {
+			Node_ptr->next->previous = Previous_node;
+		}
+		// if the node needed to be deleted is at then end
+		else {
+			head->previous = Previous_node;
+		}
 
 		//update current pointer
-
+		current = current->next;
 
 		// delete node
 		delete Node_ptr;
