@@ -1,32 +1,45 @@
+#pragma once
 #ifndef CARD_H
 #define CARD_H
-#include<iostream>
-#include<string>
+#include <iostream>
+#include <string>
 using namespace std;
-//testing comments
+
 
 class Card
 {
 private:
-	string name;
+	string value;
 	string colour;
 	int score;
 public:
 	//constructor
 	Card()
 	{
-		name = "";
+		value = "";
 		colour = "";
 		score = 0;
 	}
-	void setCard(string n, string c, int s)
+	void setCard(string v, string c, int s)
 	{
-		name = n;
+		value = v;
 		colour = c;
 		score = s;
 	}
-	string getName() const {
-		return name;
+	void setValue(string v)
+	{
+		value = v;
+	}
+	void setColour(string c)
+	{
+		colour = c;
+	}
+	void setScore(int s)
+	{
+		score = s;
+	}
+	string getValue() const {
+		return value;
 	}
 	string getColour() const {
 		return colour;
@@ -34,6 +47,21 @@ public:
 	int getScore() const {
 		return score;
 	}
-
+	bool compareStrings(string s1, string s2)
+	{
+		int compares = s1.compare(s2);
+		if (compares == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
+	void displayCard() {
+		//cout << "{ " << getValue() << ", " << getColour() << ", " << getScore() << " }" << endl;
+		cout << "{ " << getValue() << ", " << getColour() << " }" << endl;
+	}
 };
 #endif // !CARD_H

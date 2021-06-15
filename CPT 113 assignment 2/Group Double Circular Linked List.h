@@ -5,7 +5,7 @@
 
 template <class G, class C>
 //inherit HandDeckLinkedList
-class GroupDoubleCircularLinkedList : public HandDeckLinkedList<T2>
+class GroupDoubleCircularLinkedList : public HandDeckLinkedList<C>
 {
 private:
 	struct GroupNode
@@ -34,10 +34,6 @@ public:
 	void skipTurn();
 	void reverse();
 
-
-
-
-
 };
 //constructor
 template<class G, class C>
@@ -54,5 +50,33 @@ GroupDoubleCircularLinkedList<G,C>::~GroupDoubleCircularLinkedList()
 {
 	//destroy function
 }
+
+template<class G, class C>
+void addNewGroupAtEnd(G);
+
+template<class G, class C>
+void NextGroup();
+
+template<class G, class C>
+void PreviousGroup();
+
+template<class G, class C>
+void RemoveGroup(G&);
+
+template<class G, class C>
+void setFlagReverse();
+
+template<class G, class C>
+bool getFlagReverse();
+
+template<class G, class C>
+bool checkWinner();
+
+template<class G, class C>
+void skipTurn();
+
+template<class G, class C>
+void reverse();
+template<class G, class C>
 
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H
