@@ -3,14 +3,14 @@
 #include<iostream>
 using namespace std;
 
-template <class T>
+template <class C>
 class DrawPileStack
 {
 private:
 	//structure for the queue node
 	struct CardNode
 	{
-		T value; // value in a node
+		C value; // value in a node
 		CardNode* next; // pointer to the next node
 	};
 	CardNode* TopStack;
@@ -20,28 +20,33 @@ public:
 	//destructor
 	~DrawPileStack();
 	bool isEmpty();
-	void pushCard(T);
-	void popCard(T&);
+	void pushCard(C);
+	void popCard(C&);
 	void generateDeck();
 };
 
-template <class T>
-DrawPileStack<T>::DrawPileStack() {
+template <class C>
+DrawPileStack<C>::DrawPileStack() {
 	generateDeck();
 }
 
-template <class T>
-DrawPileStack<T>::~DrawPileStack() {
+template <class C>
+DrawPileStack<C>::~DrawPileStack() {
 	//destroy deck
 }
 
-template <class T>
-bool DrawPileStack<T>::isEmpty() {
+template <class C>
+bool DrawPileStack<C>::isEmpty() {
 	return (TopStack == nullptr);
 }
 
-template <class T>
-void DrawPileStack<T>::popCard(T& value) {
+template<class C>
+void DrawPileStack<C>::pushCard(C)
+{
+}
+
+template <class C>
+void DrawPileStack<C>::popCard(C& value) {
 	if (isEmpty()) {
 		cout << "The stack is empty now." << endl;
 	}
@@ -50,7 +55,8 @@ void DrawPileStack<T>::popCard(T& value) {
 	}
 };
 
-void generateDeck() {
+template <class C>
+void DrawPileStack<C>::generateDeck() {
 
 };
 

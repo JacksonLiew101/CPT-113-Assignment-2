@@ -5,13 +5,13 @@
 #include <string>
 using namespace std;
 
-template <class T>
+template <class C>
 class DiscardPileStack
 {
 private:
 	struct DiscardPileStackNode
 	{
-		T value;
+		C value;
 		DiscardPileStackNode* next;
 	};
 	DiscardPileStackNode* TopStack;
@@ -28,9 +28,15 @@ public:
 	~DiscardPileStack();
 
 	// Stack operations
-	void push(T);
+	void push(C);
 	void peek();
 	void setActionStatement(string action);
 	string getActionStatement();
 };
+
+template <class C>
+DiscardPileStack<C>::~DiscardPileStack()
+{
+	//destroy function
+}
 #endif // !DISCARDPILESTACK_H
