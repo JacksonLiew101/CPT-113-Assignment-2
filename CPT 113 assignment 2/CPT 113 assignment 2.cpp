@@ -1,9 +1,8 @@
-//#include"Group.h"
-//#include"Group Double Circular Linked List.h"
+#include"Group.h"
+#include"Group Double Circular Linked List.h"
 #include"HandDeck Linked List.h"
 #include"Discard Pile Stack.h"
 #include"DrawPile Stack.h"
-//#include"Card.h"
 
 #include<iostream>
 #include<string>
@@ -15,7 +14,7 @@ int main() {
 	DrawPileStack<Card> drawpile1;
 	DiscardPileStack<Card> discardpile1;
 	card1.setCard("1", "Red", 1);
-	
+	GroupDoubleCircularLinkedList<Group, Card> Team;
 	
 	return 0;
 }
