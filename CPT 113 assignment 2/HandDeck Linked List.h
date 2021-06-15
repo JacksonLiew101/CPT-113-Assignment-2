@@ -28,13 +28,13 @@ public:
 	bool isEmpty();			// done
 	bool matchCard(C, C);	// done
 	void playCard(C, C&);	//	done
-	void drawCard(C&);		// done
+	void drawCard(C);		// done
 	void draw2Cards(C&); // at main function
 	void draw4Cards(C&);// at main function
 	void showHandCards(); // done
 	void initialHandCards(); // draw 5 cards/ at main function
 	//bool checkCardValidity(C);  no need this function
-	void showValidCard(); // done
+	void showValidCard(C); // done
 	void setHandDeckName(string);
 	string getHandDeckName();
 	

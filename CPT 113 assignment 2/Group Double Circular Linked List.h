@@ -29,21 +29,15 @@ public:
 	void isEmpty();				// done
 	void addNewGroupAtEnd(G);	// done
 	void NextGroup();			// done
-	void RemoveGroup(G&);
+	void RemoveGroup(G&);		// done
 	void setFlagReverse(); // detect the reverse card at the main function
-	bool getFlagReverse();
+	bool getFlagReverse();		// done, KIV 
 	bool checkWinner(); // detect it at the main function
 	void skipTurn();			// done
-	void reverse();
+	void reverse();				// done, probably need to only keep reverse() or setFlagReverse
 	string getGroupNameFromList();
 };
 
-
-template<class C>
-string GroupDoubleCircularLinkedList<G,C>::getGroupNameFromList()
-{
-	return current->value.getGroupName();
-}
 //constructor
 template<class G, class C>
 GroupDoubleCircularLinkedList<G,C>::GroupDoubleCircularLinkedList() :HandDeckLinkedList<C>()
@@ -109,8 +103,6 @@ void GroupDoubleCircularLinkedList<G, C>::NextGroup() {
 	{
 		current = current->next;
 	}
-	
-	
 }
 
 template<class G, class C>
@@ -122,14 +114,12 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 
 	GroupNode* Node_ptr = nullptr;
 	GroupNode* Previous_node = nullptr;
-	
-	// only the current group will be removed
-	//Node_ptr = current;
 
+	// if the node needed to be deleted is at head
 	if (current == head) {
 		// track the node first
 		Node_ptr = head;
-		Previous_node = head->previous;
+		Previous_node = Node_ptr->previous;
 
 		// change head, this function only run during 2-4 groups, head will
 		// always points to some nodes
@@ -144,6 +134,7 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 		// delete node
 		delete Node_ptr;
 	}
+	// if the node needed to be deleted is at place other than head
 	else {
 		Node_ptr = current;
 		Previous_node = Node_ptr->previous;
@@ -155,6 +146,7 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 		}
 		// if the node needed to be deleted is at then end
 		else {
+			// connect by the head node to previous node as a cicular linked list
 			head->previous = Previous_node;
 		}
 
@@ -164,7 +156,7 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 		// delete node
 		delete Node_ptr;
 	}
-
+	no_of_group--;
 }
 
 template<class G, class C>
@@ -196,5 +188,11 @@ void GroupDoubleCircularLinkedList<G, C>::reverse() {
 	setFlagReverse();
 }
 
+
+template<class G, class C>
+string GroupDoubleCircularLinkedList<G, C>::getGroupNameFromList()
+{
+	return current->value.getGroupName();
+}
 
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H

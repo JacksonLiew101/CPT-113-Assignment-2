@@ -10,6 +10,37 @@ using namespace std;
 void Welcome();
 void Rule();
 int main() {
+    Welcome();
+    Rule();
+    int NumberOfGroups = 0;
+    do
+    {
+        cout << "Enter the number of groups to play: ";
+        cin >> NumberOfGroups;
+        if(NumberOfGroups<2 || NumberOfGroups> 4)
+        {
+            cout << "Invalid value. Please make sure that the number of groups is between 2 to 4\n";
+        }
+    }while(NumberOfGroups<2 || NumberOfGroups> 4);
+    DrawPileStack<Card> drawpile;
+	DiscardPileStack<Card> discardpile;
+
+    //first player
+    HandDeckLinkedList<Card> HandDeckA;
+
+    if(NumberOfGroups == 2)
+    {
+        HandDeckLinkedList<Card> HandDeckA;
+        HandDeckLinkedList<Card> HandDeckB;
+    }
+    else if(NumberOfGroups == 3)
+    {
+
+    }
+    else if(NumberOfGroups == 4)
+    {
+
+    }
 	Card card1;
 	//GroupDoubleCircularLinkedList<Group, Card> gameplay1;
 	DrawPileStack<Card> drawpile1;
