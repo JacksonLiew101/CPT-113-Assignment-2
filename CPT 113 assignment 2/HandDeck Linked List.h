@@ -17,7 +17,7 @@ private:
 		struct CardNode* next; // point to next node
 	};
 	CardNode* head; // list head pointer
-
+	string HandDeckName;
 public:
 	//constructor
 	HandDeckLinkedList();
@@ -35,8 +35,22 @@ public:
 	void initialHandCards(); // draw 5 cards/ at main function
 	//bool checkCardValidity(C);  no need this function
 	void showValidCard(); // done
+	void setHandDeckName(string);
+	string getHandDeckName();
 	
 };
+
+template <class C>
+void HandDeckLinkedList<C>::setHandDeckName(string name)
+{
+	HandDeckName = name;
+}
+
+template <class C>
+string HandDeckLinkedList<C>::getHandDeckName()
+{
+	return HandDeckName;
+}
 
 template <class C> 
 HandDeckLinkedList<C>::HandDeckLinkedList()

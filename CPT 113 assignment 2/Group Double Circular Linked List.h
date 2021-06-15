@@ -19,7 +19,7 @@ private:
 	GroupNode* current; // to keep track of whose turns
 	int no_of_group;
 	bool flag_reverse;
-
+	
 public:
 	//constructor
 	GroupDoubleCircularLinkedList();
@@ -28,16 +28,22 @@ public:
 
 	void isEmpty();				// done
 	void addNewGroupAtEnd(G);	// done
-	void NextGroup();
-	void PreviousGroup();
+	void NextGroup();			// done
 	void RemoveGroup(G&);
 	void setFlagReverse(); // detect the reverse card at the main function
 	bool getFlagReverse();
 	bool checkWinner(); // detect it at the main function
-	void skipTurn();
+	void skipTurn();			// done
 	void reverse();
-
+	string getGroupNameFromList();
 };
+
+
+template<class C>
+string GroupDoubleCircularLinkedList<G,C>::getGroupNameFromList()
+{
+	return current->value.getGroupName();
+}
 //constructor
 template<class G, class C>
 GroupDoubleCircularLinkedList<G,C>::GroupDoubleCircularLinkedList() :HandDeckLinkedList<C>()
@@ -96,12 +102,15 @@ void GroupDoubleCircularLinkedList<G, C>::addNewGroupAtEnd(G new_group) {
 
 template<class G, class C>
 void GroupDoubleCircularLinkedList<G, C>::NextGroup() {
-	current = current->next;
-}
-
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::PreviousGroup() {
-	current = current->previous;
+	if (flag_reverse) {
+		current = current->previous;
+	}
+	else
+	{
+		current = current->next;
+	}
+	
+	
 }
 
 template<class G, class C>
@@ -109,8 +118,44 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 	
 	// the current group is immediately removed when they lose, i.e. more than max cards
 	// possible number of groups for this function are 2,3,4
-	if (no_of_group == 2) {
-		return;
+	// Hence, when using this function, the list will not be empty
+
+	GroupNode* Node_ptr = nullptr;
+	GroupNode* Previous_node = nullptr;
+	
+	// only the current group will be removed
+	//Node_ptr = current;
+
+	if (current == head) {
+		// track the node first
+		Node_ptr = head;
+		Previous_node = head->previous;
+
+		// change head, this function only run during 2-4 groups, head will
+		// always points to some nodes
+		// and update current pointer
+		head = head->next;
+		current = head;
+
+		// connect to remaining nodes
+		head->previous = Previous_node;
+		Previous_node->next = head;
+
+		// delete node
+		delete Node_ptr;
+	}
+	else {
+		Node_ptr = current;
+		Previous_node = current->previous;
+
+
+		// Linking
+
+		//update current pointer
+
+
+		// delete node
+		delete Node_ptr;
 	}
 
 }
@@ -133,21 +178,15 @@ bool GroupDoubleCircularLinkedList<G, C>::checkWinner() {
 template<class G, class C>
 void GroupDoubleCircularLinkedList<G, C>::skipTurn() {
 	
-	if(flag_reverse)
-	{
-		// change to previousgroup() x2 function?
-		current = (current->previous)->previous;
-	}
-	else
-	{
-		current = (current->next)->next;
-	}
+	//run 2 times to skip the next player
+	NextGroup();
+	NextGroup();
 }
 
 template<class G, class C>
 void GroupDoubleCircularLinkedList<G, C>::reverse() {
-
-
+	// probably using one function enough
+	setFlagReverse();
 }
 
 
