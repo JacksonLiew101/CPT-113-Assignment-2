@@ -11,41 +11,51 @@ private:
 	struct IndexNode
 	{
 		T value;
-		struct IndexNode* next;
+		IndexNode* next;
 	};
 	int length;
 	IndexNode* head;
 
 public:
-	//constructor
-	IndexLinkedList()
-	{
-		head = nullptr;
-		length = 0;
-	}
-
-	//destructor
-	~IndexLinkedList()
-	{
-		clearNode();
-	};
-
-	//operations
+	IndexLinkedList();
+	~IndexLinkedList();
+	int getlength() const;
+	T showHeadValue() const;
+	bool search(T) const;
+	void displayList();
 	void appendNode(T);
 	void clearNode();
-	bool search(T) const;
-	void displayList() const;
-	T showHeadValue() const;
-	int getlength()
-	{
-		return length;
-	}
+	
+
 };
 
+// Constructor
+template <class T>
+IndexLinkedList<T>::IndexLinkedList()
+{
+	head = nullptr;
+	length = 0;
+}
+
+// Destructor
+template <class T>
+IndexLinkedList<T>::~IndexLinkedList()
+{
+	clearNode();
+};
+
+// Length Getter
+template <class T>
+int IndexLinkedList<T>::getlength() const
+{
+	return length;
+}
+
+// Get the value of the head of the Linked List
 template <class T>
 T IndexLinkedList<T>::showHeadValue() const
 {
-	if(head == nullptr)
+	if (head == nullptr)
 	{
 		return 0;
 	}
@@ -54,42 +64,16 @@ T IndexLinkedList<T>::showHeadValue() const
 		return head->value;
 	}
 }
-template <class T>
-void IndexLinkedList<T>::appendNode(T newValue)
-{
-	IndexNode *newNode;
-	IndexNode *nodePtr;
 
-	newNode = new IndexNode;
-	newNode->value = newValue;
-	newNode->next = nullptr;
-
-	// If there are no nodes in the list
-    // make newNode the first node.
-	if(!head)
-	{
-		head = newNode;
-	}
-	else // Otherwise, insert newNode at end.
-	{
-		nodePtr = head;
-
-		// Find the last node in the list.
-		while(nodePtr->next != nullptr)
-		{
-			nodePtr = nodePtr->next;
-		}
-		// Insert newNode as the last node.
-		nodePtr->next = newNode; 
-	}
-	length++;
-}
-
+/*
+	Linked List Methods
+*/
+// Returns true if the search value is found in the linked list
 template <class T>
 bool IndexLinkedList<T>::search(T searchValue) const
 {
-	IndexNode* nodePtr;
-	IndexNode* previousNode;
+	IndexNode* nodePtr = nullptr;
+	IndexNode* previousNode = nullptr;
 
 	if(!head)
 	{
@@ -105,15 +89,14 @@ bool IndexLinkedList<T>::search(T searchValue) const
 	{
 		nodePtr = head;
 
-		// Skip all nodes whose value member is
-        // not equal to num.
+		// Skip all nodes whose value member is not equal to num.
 		while(nodePtr != nullptr && nodePtr->value != searchValue)
 		{
 			previousNode = nodePtr;
 			nodePtr = nodePtr->next;
 		}
 
-		//if it found the node
+		// If it found
 		if(nodePtr)
 		{
 			return true;
@@ -124,11 +107,64 @@ bool IndexLinkedList<T>::search(T searchValue) const
 		}
 	}
 }
+
+// Display all the index available in the linked list
+template <class T>
+void IndexLinkedList<T>::displayList()
+{
+	IndexNode* nodePtr = nullptr; 
+
+	// Position nodePtr at the head of the list.
+	nodePtr = head;
+
+	// While nodePtr points to a node, traverse the list.
+	while (nodePtr)
+	{
+		// Display the value in this node.
+		cout << nodePtr->value << endl;
+
+		// Move to the next node.
+		nodePtr = nodePtr->next;
+	}
+}
+
+// Add new node to the linked list
+template <class T>
+void IndexLinkedList<T>::appendNode(T newValue)
+{
+	IndexNode* newNode = nullptr;
+	IndexNode* nodePtr = nullptr;
+
+	newNode = new IndexNode;
+	newNode->value = newValue;
+	newNode->next = nullptr;
+
+	// If there are no nodes in the list, make newNode the first node.
+	if (!head)
+	{
+		head = newNode;
+	}
+	else // Otherwise, insert newNode at end.
+	{
+		nodePtr = head;
+
+		// Find the last node in the list.
+		while (nodePtr->next != nullptr)
+		{
+			nodePtr = nodePtr->next;
+		}
+		// Insert newNode as the last node.
+		nodePtr->next = newNode;
+	}
+	length++;
+}
+
+// Remove every node from the linked list
 template <class T>
 void IndexLinkedList<T>::clearNode()
 {
-	IndexNode* nodePtr;
-	IndexNode* nextNode;
+	IndexNode* nodePtr = nullptr;
+	IndexNode* nextNode = nullptr;
 
 	nodePtr = head;
 
@@ -138,29 +174,9 @@ void IndexLinkedList<T>::clearNode()
 		delete nodePtr;
 
 		nodePtr = nextNode;
+		length--;
 	}
 	head = nullptr;
-	length--;
-}
-
-template <class T>
-void IndexLinkedList<T>::displayList() const
-{
-    IndexNode *nodePtr; // To move through the list
-
-    // Position nodePtr at the head of the list.
-    nodePtr = head;
-
-    // While nodePtr points to a node, traverse
-    // the list.
-    while (nodePtr)
-    {
-        // Display the value in this node.
-        cout << nodePtr->value << endl;
-
-        // Move to the next node.
-        nodePtr = nodePtr->next;
-    }
 }
 
 #endif

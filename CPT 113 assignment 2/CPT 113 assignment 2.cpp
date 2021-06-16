@@ -7,6 +7,7 @@
 #include<string>
 using namespace std;
 const int STARTING_CARD_NO = 5;
+const int MAXIMUM_CARD_NO = 10;
 void Welcome();
 void Rule();
 void UpdateHandDeckPtr(Group, HandDeckLinkedList<Card> *&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
@@ -184,7 +185,7 @@ int main() {
         cout << "\n\n";
 
          // check current hand card >10, drop group
-         if (current_deck->getNumberOfHandCards() > 10) {
+         if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
              //remove the group
              groupsinplay.RemoveGroup();
              //update to the remaining group
@@ -232,7 +233,7 @@ int main() {
 
              //play that card and save that card into temp_card
              current_deck->playCard(choose_card, temp_card);
-             current_deck->showIndexLinkedList();
+
              //add score to the group
              temp_group.addScore(temp_card.getScore());
              groupsinplay.updateGroupScore(temp_group);

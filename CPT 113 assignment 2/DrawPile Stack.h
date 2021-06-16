@@ -1,10 +1,10 @@
 #ifndef DRAWPILE_STACK_H
 #define DRAWPILE_STACK_H
 #include "Card.h" 
-#include <iostream>
-#include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <iostream>
+#include <string>
 using namespace std;
 
 // Constants for initialising card decks
@@ -87,7 +87,7 @@ void DrawPileStack<C>::pushCard(C new_card)
 	// allocate a new node
 	CardNode* New_node = nullptr;
 	New_node = new CardNode;
-	New_node->value = new_card;
+	New_node->value.setCard(new_card.getValue(), new_card.getColour(), new_card.getScore());
 	New_node->next = nullptr;
 
 	if (isEmpty()) {
@@ -247,9 +247,9 @@ void DrawPileStack<C>::generateDeck()
 			newcard.setScore(5);
 		}
 
-		// Push this new cardNode into DrawPile Stack
 		pushCard(newcard);
 	}
+
 }
 
 // Swap locations between two value

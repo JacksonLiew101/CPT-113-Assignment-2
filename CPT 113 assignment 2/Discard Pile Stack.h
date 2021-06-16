@@ -1,9 +1,6 @@
 #ifndef DISCARDPILESTACK_H
 #define DISCARDPILESTACK_H
 #include"Card.h"
-#include <iostream>
-#include <string>
-using namespace std;
 
 // This is the template class for Discard Pile Stack
 template <class C>
