@@ -31,16 +31,17 @@ public:
 	void displayList();
 	void addNewGroupAtEnd(G);	// done
 	void NextGroup();			// done
-	void RemoveGroup(G&);		// done
+	void RemoveGroup();		// done
 	void setFlagReverse(); // detect the reverse card at the main function, probably won't need
 	bool getFlagReverse();		// done, probably won't need
-	bool checkWinner(); // detect it at the main function
 	void skipTurn();			// done
 	void reverse();				// done, probably need to only keep reverse() or setFlagReverse
 	//string getGroupNameFromList(); // done, probably need to removed
 	void getCurrentNode(G&);
 	int getPlayerTurn();
 	void updateGroupScore(G);
+	int getNoOfGroup();
+	void findHighestScoreGroup(G&);
 };
 
 //constructor
@@ -141,14 +142,17 @@ void GroupDoubleCircularLinkedList<G>::NextGroup() {
 }
 
 template<class G>
-void GroupDoubleCircularLinkedList<G>::RemoveGroup(G& out_group) {
+void GroupDoubleCircularLinkedList<G>::RemoveGroup() {
 	
 	// the current group is immediately removed when they lose, i.e. more than max cards
 	// possible number of groups for this function are 2,3,4
 	// Hence, when using this function, the list will not be empty
 
+	Group removed_group;
 	GroupNode* Node_ptr = nullptr;
 	GroupNode* Previous_node = nullptr;
+
+	removed_group.setGroup(current->value.getScore(), current->value.getPlayer1Name(), current->value.getPlayer2Name(), current->value.getGroupName());
 
 	// if the node needed to be deleted is at head
 	if (current == head) {
@@ -192,6 +196,15 @@ void GroupDoubleCircularLinkedList<G>::RemoveGroup(G& out_group) {
 		delete Node_ptr;
 	}
 	no_of_group--;
+
+
+	// after removal display a message first
+	cout << "\t\t\tYou Lose! You have more than 10 cards already.\n";
+	cout << "\t\t\tNice try. Good luck next time.\n";
+	cout << "\t\t\t\t\tGroup " << removed_group.getGroupName() << " is dropped out.\n";
+	system("pause");
+
+
 }
 
 template<class G>
@@ -202,11 +215,6 @@ void GroupDoubleCircularLinkedList<G>::setFlagReverse() {
 template<class G>
 bool GroupDoubleCircularLinkedList<G>::getFlagReverse() {
 	return flag_reverse;
-}
-
-template<class G>
-bool GroupDoubleCircularLinkedList<G>::checkWinner() {
-	
 }
 
 template<class G>
@@ -246,6 +254,33 @@ int GroupDoubleCircularLinkedList<G>::getPlayerTurn() {
 template<class G>
 void GroupDoubleCircularLinkedList<G>::updateGroupScore(G group) {
 	current->value.setGroup(group.getScore(), group.getPlayer1Name(), group.getPlayer2Name(), group.getGroupName());
+}
+
+template<class G>
+int GroupDoubleCircularLinkedList<G>::getNoOfGroup() {
+	return no_of_group;
+}
+
+template<class G>
+void GroupDoubleCircularLinkedList<G>::findHighestScoreGroup(G& winner_group) {
+	int Highest = current->value.getScore();
+
+	// find the highest
+	for (int i = 0; i < no_of_group; i++) {
+		if (current->value.getScore() > Highest) {
+			Highest = current->value.getScore();
+		}
+		NextGroup();
+	}
+
+	// find the group with the highest score
+	for (int i = 0; i < no_of_group; i++) {
+		if (current->value.getScore() == Highest) {
+			winner_group.setGroup(current->value.getScore(), current->value.getPlayer1Name(), current->value.getPlayer2Name(), current->value.getGroupName());
+			break;
+		}
+		NextGroup();
+	}
 }
 
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H

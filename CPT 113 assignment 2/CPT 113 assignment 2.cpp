@@ -25,7 +25,6 @@ int main() {
     Card temp_card;
     Card choose_card;
     Group temp_group;
-    Group temp_group2;
     int number_of_groups = 0;
     int player_choice_card_index = 0;
     string group_name, player1_name, player2_name, action;
@@ -221,8 +220,32 @@ int main() {
         //send that out card to discard pile
         discardpile.push(temp_card);
         // end this turn, go to the next player by repeating this loop
+
+        // check current hand card >10, drop group
+        if (current_deck->getNumberOfHandCards() > 10) {
+            groupsinplay.RemoveGroup();
+        }
+
+        // check winner 
+        if (drawpile.isEmpty()) {
+            winner_flag = true;
+            groupsinplay.findHighestScoreGroup(temp_group);
+        }
+        else if (current_deck->isEmpty()) {
+            winner_flag = true;
+        }
+        else if (groupsinplay.getNoOfGroup()==1) {
+            winner_flag = true;
+        }
+
     }
 
+    // display the winners
+    cout << "\t\t\tCongratulations\n";
+    cout << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
+    cout << "Group " << temp_group.getGroupName() << " wins the game!!!!\n";
+    cout << "With a score of " << temp_group.getScore();
+    cout << "\n\nThe game is now ended. To play again, run the game program file from the folder.\n";
 
   
 	return 0;
