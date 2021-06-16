@@ -19,7 +19,8 @@ private:
 	GroupNode* current; // to keep track of whose turns
 	int no_of_group;
 	bool flag_reverse;
-	
+	int player_turn = 1; // put here instead of Group.h because for whole round will keep the same player going
+
 public:
 	//constructor
 	GroupDoubleCircularLinkedList();
@@ -31,13 +32,14 @@ public:
 	void addNewGroupAtEnd(G);	// done
 	void NextGroup();			// done
 	void RemoveGroup(G&);		// done
-	void setFlagReverse(); // detect the reverse card at the main function
-	bool getFlagReverse();		// done, KIV 
+	void setFlagReverse(); // detect the reverse card at the main function, probably won't need
+	bool getFlagReverse();		// done, probably won't need
 	bool checkWinner(); // detect it at the main function
 	void skipTurn();			// done
 	void reverse();				// done, probably need to only keep reverse() or setFlagReverse
 	//string getGroupNameFromList(); // done, probably need to removed
 	G getCurrentNode();
+	string getPlayerTurn();
 };
 
 //constructor
@@ -109,6 +111,7 @@ void GroupDoubleCircularLinkedList<G, C>::addNewGroupAtEnd(G new_group) {
 		New_node->previous = head->previous;
 		New_node->next = head;
 		head->previous = New_node;
+		current = head->previous;
 	}
 	no_of_group++;
 
@@ -123,6 +126,12 @@ void GroupDoubleCircularLinkedList<G, C>::NextGroup() {
 	else
 	{
 		current = current->next;
+	}
+
+	// After changing current group, check if need to switch player or not
+	if (current = head) {
+		//automatic flips between 0 and 1 when called
+		player_turn = 1 - player_turn;
 	}
 }
 
@@ -207,6 +216,7 @@ template<class G, class C>
 void GroupDoubleCircularLinkedList<G, C>::reverse() {
 	// probably using one function enough
 	setFlagReverse();
+	//  suggestion: immediately change to next player here
 }
 
 /*
@@ -221,4 +231,10 @@ template<class G, class C>
 G GroupDoubleCircularLinkedList<G, C>::getCurrentNode() {
 	return current->value;
 }
+
+template<class G, class C>
+string GroupDoubleCircularLinkedList<G, C>::getPlayerTurn() {
+	return player_turn;
+}
+
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H

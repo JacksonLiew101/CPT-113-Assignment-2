@@ -6,76 +6,65 @@
 #include<iostream>
 #include<string>
 using namespace std;
+const int STARTING_CARD_NO = 5;
 void Welcome();
 void Rule();
 int main() {
-    Card card1;
-    Card card2;
-    DiscardPileStack<Card> discardpile1;
-	DrawPileStack<Card> drawpile1;
-	drawpile1.displayStack();
-	system("pause");
-	cout << endl;
-	drawpile1.popCard(card1);
-	card1.displayCard();
-	system("pause");
-	cout << endl;
-	drawpile1.displayStack();
-    cout << endl;
-    HandDeckLinkedList<Card> handDeck1;
-    handDeck1.drawCard(card1);
-    handDeck1.showHandCards();
-    cout << endl;
-    drawpile1.popCard(card1);
-    handDeck1.drawCard(card1);
-    handDeck1.showHandCards();
-    cout << endl;
-    handDeck1.playCard(card1, card2);
-    cout << "After using 1 card:\n";
-    handDeck1.showHandCards();
-    cout << endl;
-    discardpile1.push(card2);
-    cout << "In the discard pile: " << endl;
-    discardpile1.displayStack();
-    /*Welcome();
+    // Data Structures, Objects and Variables needed
+    DrawPileStack<Card> drawpile;
+    DiscardPileStack<Card> discardpile;
+    GroupDoubleCircularLinkedList<Group, Card> groupsinplay;
+    //IndexLinkedList indexvalidcard;???
+    HandDeckLinkedList<Card> HandDeckA;
+    HandDeckLinkedList<Card> HandDeckB;
+    HandDeckLinkedList<Card> HandDeckC;
+    HandDeckLinkedList<Card> HandDeckD;
+    HandDeckLinkedList<Card>* current_deck = nullptr;
+    Card temp_card1;
+    Card temp_card2;
+    Group temp_group;
+    int number_of_groups = 0;
+    string group_name, player1_name, player2_name, action;
+    string group_list = "ABCD";
+    
+    Welcome();
     Rule();
-    int NumberOfGroups = 0;
     do
     {
         cout << "Enter the number of groups to play: ";
-        cin >> NumberOfGroups;
-        if(NumberOfGroups<2 || NumberOfGroups> 4)
+        cin >> number_of_groups;
+        if(number_of_groups<2 || number_of_groups> 4)
         {
             cout << "Invalid value. Please make sure that the number of groups is between 2 to 4\n";
         }
-    }while(NumberOfGroups<2 || NumberOfGroups> 4);
-    DrawPileStack<Card> drawpile;
-	DiscardPileStack<Card> discardpile;
-    GroupDoubleCircularLinkedList<Group, Card> GroupsLinkedList;
-    Card temp_card;
-    Group temp_group;
-    //first player
-    HandDeckLinkedList<Card> HandDeckA;
+    }while(number_of_groups<2 || number_of_groups> 4);
+   
+	// create groups
+    for (int i = 0; i < number_of_groups; i++) {
+        cout << "\nEnter player 1's name for this group " << group_list[i] << ": ";
+        cin >> player1_name;
+        cout << "\nEnter player 2's name for this group " << group_list[i] << ": ";
+        cin >> player2_name;
+        group_name = group_list[i];
+        temp_group.setGroup(0, player1_name, player2_name, group_name);
+        groupsinplay.addNewGroupAtEnd(temp_group);
+    }
 
-    if(NumberOfGroups == 2)
-    {
-        HandDeckLinkedList<Card> HandDeckB;
-        
-    }
-    else if(NumberOfGroups == 3)
-    {
-        
-    }
-    else if(NumberOfGroups == 4)
-    {
+    // initialise handdeck for each groups
+    // group now is last added group
+    for (int i = 0; i < STARTING_CARD_NO; i++) {
 
+        for (int j = 0; j < number_of_groups; j++) {
+            //change deck based on current group
+
+            // add one card for each group at a time
+
+            // change group
+            
+             // function should get the name if name==this, point this to that
+            // void name(string name, Class *&, Class &, Class &, Class &, Class &)
+        }
     }
-	Card card1;
-	//GroupDoubleCircularLinkedList<Group, Card> gameplay1;
-	DrawPileStack<Card> drawpile1;
-	DiscardPileStack<Card> discardpile1;
-	card1.setCard("1", "Red", 1);
-	GroupDoubleCircularLinkedList<Group, Card> Team; */
 	
 	return 0;
 }

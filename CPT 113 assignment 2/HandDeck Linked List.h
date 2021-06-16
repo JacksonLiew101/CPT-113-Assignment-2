@@ -4,6 +4,7 @@
 #include<iostream>
 #include <string>
 #include "DrawPile Stack.h"
+#include "Index Linked List.h"
 using namespace std;
 
 template <class C >
@@ -18,6 +19,7 @@ private:
 	};
 	CardNode* head; // list head pointer
 	string HandDeckName;
+	IndexLinkedList<int> Indexes;
 public:
 	//constructor
 	HandDeckLinkedList();
@@ -35,8 +37,9 @@ public:
 	//void initialHandCards(); // draw 5 cards/ at main function
 	//bool checkCardValidity(C);  no need this function
 	void showValidCard(C); // done
-	void setHandDeckName(string);
-	string getHandDeckName();
+	C copyValidChosenCard(int); // done
+	void setHandDeckName(string); //done
+	string getHandDeckName(); //done
 	
 };
 
@@ -96,7 +99,7 @@ bool HandDeckLinkedList<C>::matchCard(C search_card, C this_card)
 // the card will be pass to a temp class obj in the main
 // both of the card must be from different objects
 template<class C>
-void HandDeckLinkedList<C>::playCard(C card, C& out_card)
+void HandDeckLinkedList<C>::playCard(C, C& out_card)
 {
 	// create two pointer trackers
 	CardNode* Node_ptr = nullptr;
@@ -154,6 +157,7 @@ void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 			delete Node_ptr;
 		}
 	}
+	// Suggestion: wanna add if the card is last card, add "UNO statements??
 }
 
 template<class C>
@@ -212,6 +216,24 @@ void HandDeckLinkedList<C>::showHandCards()
 	cout << endl;
 }
 
+
+template<class C>
+C HandDeckLinkedList<C>::copyValidChosenCard(int index)
+{
+	CardNode* nodePtr;
+	int i = 0;
+
+	nodePtr = head;
+	while(!(nodePtr == nullptr))
+	{
+		i++;
+		if(i == (index))
+		{
+			return nodePtr->value;
+		}
+		nodePtr = nodePtr->next;
+	}
+}
 /*template<class C>
 inline void HandDeckLinkedList<C>::initialHandCards()
 {
@@ -229,6 +251,7 @@ template<class C>
 void HandDeckLinkedList<C>::showValidCard(C searchCard)
 {
 	CardNode* nodePtr;
+	int i = 0;
 	// if the list is empty, do nothing
 	if(!head)
 	{
@@ -248,18 +271,20 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 	cout << "These are the cards that can be used: ";
 	while(!(nodePtr == nullptr))
 	{
+		i++;
 		//same number or same colour
 		if(searchCard.compareStrings(nodePtr->value.getValue(), searchCard.getValue()) || searchCard.compareStrings(nodePtr->value.getColour(), searchCard.getColour()))
 		{
 			//If this node is the last card in the hand
 			if(nodePtr->next == nullptr)
 			{
-				cout << "{ " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
+				cout << i<< ". { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
 			}
 			else
 			{
-				cout << "{ " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
+				cout <<i<< " { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
 			}
+			Indexes.appendNode(i);
 		}
 		//for wild card
 		//wild card always can be used
@@ -268,12 +293,13 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 			//If this node is the last card in the hand
 			if(nodePtr->next == nullptr)
 			{
-				cout << "{ " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
+				cout << i<<" { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
 			}
 			else
 			{
-				cout << "{ " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
+				cout <<i<< " { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
 			}
+			Indexes.appendNode(i);
 		}
 		nodePtr = nodePtr->next;
 	}

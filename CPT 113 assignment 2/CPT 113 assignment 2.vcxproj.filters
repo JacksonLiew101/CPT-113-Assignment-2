@@ -41,5 +41,8 @@
     <ClInclude Include="Group.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Index Linked List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -111,3 +111,33 @@
 */
 
 // Testing HandDeckLinkedList Class
+/*
+	Card card1;
+	Card card2;
+	DiscardPileStack<Card> discardpile1;
+	DrawPileStack<Card> drawpile1;
+	drawpile1.displayStack();
+	system("pause");
+	cout << endl;
+	drawpile1.popCard(card1);
+	card1.displayCard();
+	system("pause");
+	cout << endl;
+	drawpile1.displayStack();
+	cout << endl;
+	HandDeckLinkedList<Card> handDeck1;
+	handDeck1.drawCard(card1);
+	handDeck1.showHandCards();
+	cout << endl;
+	drawpile1.popCard(card1);
+	handDeck1.drawCard(card1);
+	handDeck1.showHandCards();
+	cout << endl;
+	handDeck1.playCard(card1, card2);
+	cout << "After using 1 card:\n";
+	handDeck1.showHandCards();
+	cout << endl;
+	discardpile1.push(card2);
+	cout << "In the discard pile: " << endl;
+	discardpile1.displayStack();
+*/

@@ -7,25 +7,20 @@ using namespace std;
 class Group
 {
 private:
-	int player_turn, score;
+	int score;
 	string player1_name, player2_name, groupname;
 public:
 	Group() {
-		player_turn = 0;
 		score = 0;
 		player1_name = "";
 		player2_name = "";
 		groupname = "";
 	};
-	void setGroup(int player_turn, int score, string player1_name, string player2_name, string group_name) {
-		this->player_turn = player_turn;
+	void setGroup(int score, string player1_name, string player2_name, string group_name) {
 		this->score = score;
 		this->player1_name = player1_name;
 		this->player2_name = player2_name;
 		this->groupname = groupname;
-	}
-	void setPlayerturn(int turn) {
-		player_turn = turn;
 	}
 	void setScore(int s){
 		score = s;
@@ -38,9 +33,6 @@ public:
 	}
 	void setGroupName(string name) {
 		groupname = name;
-	}
-	int getPlayerTurn() const {
-		return player_turn;
 	}
 	int getScore() const {
 		return score;
