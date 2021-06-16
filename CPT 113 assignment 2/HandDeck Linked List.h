@@ -11,42 +11,33 @@ template <class C >
 class HandDeckLinkedList
 {
 private:
-	//declare a structure for the list
 	struct CardNode
 	{
-		C value; // value in this node
-		struct CardNode* next; // point to next node
+		C value;
+		CardNode* next;
 	};
-	CardNode* head; // list head pointer
+	CardNode* head;
+	IndexLinkedList<int> Indexes;
 	int NumberOfHandCards;
 	string HandDeckName;
-	IndexLinkedList<int> Indexes;
+	
 public:
-	//constructor
 	HandDeckLinkedList();
-	//~destructor
 	~HandDeckLinkedList();
-
-	//linked list operations
-	bool isEmpty();			// done
-	bool matchCard(C, C);	// done
-	void playCard(C, C&);	//	done
-	void drawCard(C);		// done
-	//void draw2Cards(C&); // at main function
-	//void draw4Cards(C&);// at main function
-	void showHandCards(); // done
-	//void initialHandCards(); // draw 5 cards/ at main function
-	//bool checkCardValidity(C);  no need this function
-	void showValidCard(C); // done
-	void copyValidChosenCard(int, C&); // done
-	void setHandDeckName(string); //done
-	string getHandDeckName(); //done
-	int getNumberOfHandCards(); //done
-	void clearNode();
+	bool isEmpty();			
+	bool matchCard(C, C);	
+	void playCard(C, C&);	
+	void drawCard(C);		
+	void showHandCards();
+	void showValidCard(C);
+	void copyValidChosenCard(int, C&);
+	void setHandDeckName(string);
+	string getHandDeckName(); 
+	int getNumberOfHandCards();
 	bool searchIndex(int) const;
 	void clearIndexList();
 	int getIndexListLength();
-	void promptColour(int& choice, string& colour_change);
+	void promptColour(int&, string&);
 	void showIndexLinkedList();
 	int showIndexLinkedListHead();
 };

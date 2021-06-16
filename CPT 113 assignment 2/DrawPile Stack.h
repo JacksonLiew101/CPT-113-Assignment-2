@@ -242,28 +242,17 @@ void DrawPileStack<C>::generateDeck()
 		{
 			newcard.setScore(4);
 		}
-		else if(newcard.compareStrings(newcard.getValue(),"5"))
+		else if (newcard.compareStrings(newcard.getValue(), "5"))
 		{
 			newcard.setScore(5);
 		}
 
-		// before push testing
-		//cout << "This is before pushing" << endl;
-		//newcard.displayCard();
-		//system("pause");
-
-		// push this new cardNode into DrawPile Stack
+		// Push this new cardNode into DrawPile Stack
 		pushCard(newcard);
-		//total++;
-		//cout << "After pushing" << endl;
-		//displayStack();
-		//system("pause");
 	}
-
-	//cout << "Total card is pushed:" << total << endl;
-	//system("pause");
 }
 
+// Swap locations between two value
 template<class C>
 void DrawPileStack<C>::swap(int* a, int* b)
 {
@@ -272,6 +261,7 @@ void DrawPileStack<C>::swap(int* a, int* b)
 	*b = temp;
 }
 
+// Randomly swap the locations of all value
 template<class C>
 void DrawPileStack<C>::randomize(int arr[], int n)
 {
@@ -284,9 +274,5 @@ void DrawPileStack<C>::randomize(int arr[], int n)
 		swap(&arr[i], &arr[j]);
 	}
 }
-
-
-
-
 
 #endif  // !DRAWPILE_STACK_H
