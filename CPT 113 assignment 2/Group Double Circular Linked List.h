@@ -1,10 +1,10 @@
 #ifndef GROUPDOUBLECIRCULARLINKEDLIST_H
 #define GROUPDOUBLECIRCULARLINKEDLIST_H
 #include"Group.h"
-#include"HandDeck Linked List.h"
-#include"Discard Pile Stack.h"
+//#include"HandDeck Linked List.h"
+//#include"Discard Pile Stack.h"
 
-template <class G, class C>
+template <class G>
 //inherit HandDeckLinkedList
 class GroupDoubleCircularLinkedList
 {
@@ -12,14 +12,14 @@ private:
 	struct GroupNode
 	{
 		G value;
-		GroupNode* next;
-		GroupNode* previous;
+		struct GroupNode* next;
+		struct GroupNode* previous;
 	};
 	GroupNode* head; // 1st Group
 	GroupNode* current; // to keep track of whose turns
 	int no_of_group;
 	bool flag_reverse;
-	int player_turn = 1; // put here instead of Group.h because for whole round will keep the same player going
+	int player_turn; // put here instead of Group.h because for whole round will keep the same player going
 
 public:
 	//constructor
@@ -38,23 +38,24 @@ public:
 	void skipTurn();			// done
 	void reverse();				// done, probably need to only keep reverse() or setFlagReverse
 	//string getGroupNameFromList(); // done, probably need to removed
-	G getCurrentNode();
-	string getPlayerTurn();
+	void getCurrentNode(G&);
+	int getPlayerTurn();
 };
 
 //constructor
-template<class G, class C>
-GroupDoubleCircularLinkedList<G,C>::GroupDoubleCircularLinkedList()
+template<class G>
+GroupDoubleCircularLinkedList<G>::GroupDoubleCircularLinkedList()
 {
 	head = nullptr; 
 	current = nullptr;
 	flag_reverse = false;
 	no_of_group = 0;
+	player_turn = 1;
 }
 
 //destructor
-template<class G, class C>
-GroupDoubleCircularLinkedList<G,C>::~GroupDoubleCircularLinkedList()
+template<class G>
+GroupDoubleCircularLinkedList<G>::~GroupDoubleCircularLinkedList()
 {
 	GroupNode* Node_ptr = nullptr;
 
@@ -68,13 +69,13 @@ GroupDoubleCircularLinkedList<G,C>::~GroupDoubleCircularLinkedList()
 	current = nullptr;
 }
 
-template<class G, class C>
-bool GroupDoubleCircularLinkedList<G, C>::isEmpty() {
+template<class G>
+bool GroupDoubleCircularLinkedList<G>::isEmpty() {
 	return head == nullptr;
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::displayList() {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::displayList() {
 	GroupNode* Node_ptr = nullptr;
 	Node_ptr = head;
 
@@ -88,11 +89,13 @@ void GroupDoubleCircularLinkedList<G, C>::displayList() {
 }
 
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::addNewGroupAtEnd(G new_group) {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::addNewGroupAtEnd(G new_group) {
 	
-	GroupNode* New_node = new GroupNode; // allocate a new node
-	GroupNode* Node_ptr = nullptr; // tracker to move through list
+	GroupNode* New_node; 
+	New_node = new GroupNode; // allocate a new node
+	GroupNode* Node_ptr;
+	Node_ptr= nullptr; // tracker to move through list
 
 	// store value inside new node and point to head
 	New_node->value = new_group;
@@ -100,27 +103,28 @@ void GroupDoubleCircularLinkedList<G, C>::addNewGroupAtEnd(G new_group) {
 	
 	Node_ptr = head;
 	
-	if (isEmpty()) {
+	if (isEmpty() == true) {
 		New_node->next = New_node;
 		New_node->previous = New_node;
 		head = New_node;
 		current = head;
 	}
 	else {
-		(head->previous)->next = New_node;
+		//here got problem
+		(head->previous)->next = New_node;	
 		New_node->previous = head->previous;
 		New_node->next = head;
 		head->previous = New_node;
-		current = head->previous;
+		current = New_node; // I changed this liao, from current = head->previous
 	}
 	no_of_group++;
 
 
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::NextGroup() {
-	if (flag_reverse) {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::NextGroup() {
+	if (flag_reverse == true) {
 		current = current->previous;
 	}
 	else
@@ -129,14 +133,14 @@ void GroupDoubleCircularLinkedList<G, C>::NextGroup() {
 	}
 
 	// After changing current group, check if need to switch player or not
-	if (current = head) {
+	if (current == head) {
 		//automatic flips between 0 and 1 when called
 		player_turn = 1 - player_turn;
 	}
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::RemoveGroup(G& out_group) {
 	
 	// the current group is immediately removed when they lose, i.e. more than max cards
 	// possible number of groups for this function are 2,3,4
@@ -189,34 +193,35 @@ void GroupDoubleCircularLinkedList<G, C>::RemoveGroup(G& out_group) {
 	no_of_group--;
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::setFlagReverse() {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::setFlagReverse() {
 	flag_reverse = !flag_reverse;
 }
 
-template<class G, class C>
-bool GroupDoubleCircularLinkedList<G, C>::getFlagReverse() {
+template<class G>
+bool GroupDoubleCircularLinkedList<G>::getFlagReverse() {
 	return flag_reverse;
 }
 
-template<class G, class C>
-bool GroupDoubleCircularLinkedList<G, C>::checkWinner() {
+template<class G>
+bool GroupDoubleCircularLinkedList<G>::checkWinner() {
 	
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::skipTurn() {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::skipTurn() {
 	
 	//run 2 times to skip the next player
 	NextGroup();
 	NextGroup();
 }
 
-template<class G, class C>
-void GroupDoubleCircularLinkedList<G, C>::reverse() {
+template<class G>
+void GroupDoubleCircularLinkedList<G>::reverse() {
 	// probably using one function enough
 	setFlagReverse();
 	//  suggestion: immediately change to next player here
+	NextGroup();
 }
 
 /*
@@ -227,13 +232,13 @@ string GroupDoubleCircularLinkedList<G, C>::getGroupNameFromList()
 }
 */
 
-template<class G, class C>
-G GroupDoubleCircularLinkedList<G, C>::getCurrentNode() {
-	return current->value;
+template<class G>
+void GroupDoubleCircularLinkedList<G>::getCurrentNode(G& store_group) {
+	store_group.setGroup(current->value.getScore(), current->value.getPlayer1Name(), current->value.getPlayer2Name(), current->value.getGroupName());
 }
 
-template<class G, class C>
-string GroupDoubleCircularLinkedList<G, C>::getPlayerTurn() {
+template<class G>
+int GroupDoubleCircularLinkedList<G>::getPlayerTurn() {
 	return player_turn;
 }
 

@@ -17,7 +17,7 @@ private:
 	struct CardNode
 	{
 		C value; // value in a node
-		CardNode* next; // pointer to the next node
+		struct CardNode* next; // pointer to the next node
 	};
 	CardNode* top;
 	
@@ -124,7 +124,7 @@ void DrawPileStack<C>::popCard(C& value) {
 		top = top->next;
 
 		// store the value into the input variable
-		value = Node_ptr->value;
+		value.setCard(Node_ptr->value.getValue(),Node_ptr->value.getColour(), Node_ptr->value.getScore());
 
 		// delete previous top node
 		delete Node_ptr;

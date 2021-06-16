@@ -18,6 +18,7 @@ private:
 		struct CardNode* next; // point to next node
 	};
 	CardNode* head; // list head pointer
+	int NumberOfHandCards;
 	string HandDeckName;
 	IndexLinkedList<int> Indexes;
 public:
@@ -40,8 +41,16 @@ public:
 	C copyValidChosenCard(int); // done
 	void setHandDeckName(string); //done
 	string getHandDeckName(); //done
-	
+	int getNumberOfHandCards(); //done
 };
+
+
+template <class C>
+int HandDeckLinkedList<C>::getNumberOfHandCards()
+{
+	return NumberOfHandCards;
+}
+
 
 template <class C>
 void HandDeckLinkedList<C>::setHandDeckName(string name)
@@ -59,7 +68,9 @@ template <class C>
 HandDeckLinkedList<C>::HandDeckLinkedList()
 {
 	head = nullptr;
-	//initialHandCards();
+	NumberOfHandCards = 0;
+	HandDeckName = "";
+	
 }
 
 //destructor
@@ -99,7 +110,7 @@ bool HandDeckLinkedList<C>::matchCard(C search_card, C this_card)
 // the card will be pass to a temp class obj in the main
 // both of the card must be from different objects
 template<class C>
-void HandDeckLinkedList<C>::playCard(C, C& out_card)
+void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 {
 	// create two pointer trackers
 	CardNode* Node_ptr = nullptr;
@@ -115,14 +126,14 @@ void HandDeckLinkedList<C>::playCard(C, C& out_card)
 		// store the value of the card first
 		// before playing the "Wild" or "Wild Draw Four", must states the colour first
 		if (card.compareStrings(head->value.getValue(),"Wild") || card.compareStrings(head->value.getValue(),"Wild Draw Four")) {
-			out_card = head->value;
+			out_card.setCard(head->value.getValue(),head->value.getColour(), head->value.getScore());
 			// prompt to change colour
 			cout << "\nWhat colour do you pick now? ->" << endl;
 			cin >> Colour_change;
 			out_card.setColour(Colour_change);
 		}
 		else {
-			out_card = head->value;
+			out_card.setCard(head->value.getValue(),head->value.getColour(), head->value.getScore());
 		}
 
 		Node_ptr = head->next;
@@ -142,14 +153,15 @@ void HandDeckLinkedList<C>::playCard(C, C& out_card)
 			// update the card details to the parameter first
 			// before playing the "Wild" or "Wild Draw Four", must states the colour first
 			if (card.compareStrings(Node_ptr->value.getValue(), "Wild") || card.compareStrings(Node_ptr->value.getValue(), "Wild Draw Four")) {
-				out_card = Node_ptr->value;
+				out_card.setCard(Node_ptr->value.getValue(),Node_ptr->value.getColour(), Node_ptr->value.getScore());
+		
 				// prompt to change colour
 				cout << "\nWhat colour do you pick now? ->" << endl;
 				cin >> Colour_change;
 				out_card.setColour(Colour_change);
 			}
 			else {
-				out_card = Node_ptr->value;
+				out_card.setCard(Node_ptr->value.getValue(),Node_ptr->value.getColour(), Node_ptr->value.getScore());
 			}
 
 			// delete the node
@@ -157,6 +169,7 @@ void HandDeckLinkedList<C>::playCard(C, C& out_card)
 			delete Node_ptr;
 		}
 	}
+	NumberOfHandCards--;
 	// Suggestion: wanna add if the card is last card, add "UNO statements??
 }
 
@@ -172,7 +185,7 @@ void HandDeckLinkedList<C>::drawCard(C new_card)
 
 	 // If there are no nodes in the list
     // make newNode the first node.
-	if(!head)
+	if(isEmpty())
 	{
 		head = newNode;
 	}
@@ -188,6 +201,7 @@ void HandDeckLinkedList<C>::drawCard(C new_card)
 		 // Insert newNode as the last node.
 		nodePtr->next = newNode;
 	}
+	NumberOfHandCards++;
 }
 
 /*template<class C>

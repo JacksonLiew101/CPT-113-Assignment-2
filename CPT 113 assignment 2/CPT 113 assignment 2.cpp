@@ -9,20 +9,23 @@ using namespace std;
 const int STARTING_CARD_NO = 5;
 void Welcome();
 void Rule();
+void UpdateHandDeckPtr(Group, HandDeckLinkedList<Card> *&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+
 int main() {
     // Data Structures, Objects and Variables needed
     DrawPileStack<Card> drawpile;
     DiscardPileStack<Card> discardpile;
-    GroupDoubleCircularLinkedList<Group, Card> groupsinplay;
+    GroupDoubleCircularLinkedList<Group> groupsinplay;
     //IndexLinkedList indexvalidcard;???
     HandDeckLinkedList<Card> HandDeckA;
     HandDeckLinkedList<Card> HandDeckB;
     HandDeckLinkedList<Card> HandDeckC;
     HandDeckLinkedList<Card> HandDeckD;
     HandDeckLinkedList<Card>* current_deck = nullptr;
-    Card temp_card1;
-    Card temp_card2;
+    Card temp_card;
+    Card choose_card;
     Group temp_group;
+    Group temp_group2;
     int number_of_groups = 0;
     string group_name, player1_name, player2_name, action;
     string group_list = "ABCD";
@@ -55,17 +58,40 @@ int main() {
     for (int i = 0; i < STARTING_CARD_NO; i++) {
 
         for (int j = 0; j < number_of_groups; j++) {
-            //change deck based on current group
+            // change group before starting, first card start at first group
+            groupsinplay.NextGroup();
+
+            // change deck based on current group
+            groupsinplay.getCurrentNode(temp_group);
+            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
 
             // add one card for each group at a time
-
-            // change group
-            
-             // function should get the name if name==this, point this to that
-            // void name(string name, Class *&, Class &, Class &, Class &, Class &)
+            drawpile.popCard(temp_card);
+            current_deck->drawCard(temp_card);
         }
     }
 	
+    
+    //pop out 1 card from drawpile as starting card
+    //change the starting card if the first popped out card is action card
+    drawpile.popCard(temp_card);
+
+    if(temp_card.compareStrings(temp_card.getValue(),"Draw Two")||temp_card.compareStrings(temp_card.getValue(),"Skip")||temp_card.compareStrings(temp_card.getValue(),"Reverse"))
+    {
+        temp_card.setValue("1");
+    }
+    else if(temp_card.compareStrings(temp_card.getValue(),"Wild Draw Four")||temp_card.compareStrings(temp_card.getValue(),"Wild"))
+    {
+        temp_card.setValue("1");
+        temp_card.setColour("Red");
+    }
+    discardpile.push(temp_card);
+    
+
+    //start game
+
+
+
 	return 0;
 }
 
@@ -100,4 +126,23 @@ void Rule()
     cout << "\t**************************************************************" << endl
          << endl;
     system("pause");
+}
+
+void UpdateHandDeckPtr(Group temp_group, HandDeckLinkedList<Card> *&current_deck, HandDeckLinkedList<Card> &HandDeckA, HandDeckLinkedList<Card> &HandDeckB, HandDeckLinkedList<Card> &HandDeckC, HandDeckLinkedList<Card> &HandDeckD)
+{
+    if (temp_group.compareStrings(temp_group.getGroupName(), "A")) {
+        current_deck = &HandDeckA;
+    }
+    else if (temp_group.compareStrings(temp_group.getGroupName(), "B")) {
+        current_deck = &HandDeckB;
+    }
+    else if (temp_group.compareStrings(temp_group.getGroupName(), "C")) {
+        current_deck = &HandDeckC;
+    }
+    else if (temp_group.compareStrings(temp_group.getGroupName(), "D")) {
+        current_deck = &HandDeckD;
+    }
+    else {
+        cout << "There is a problem in the retrieve group name\n";
+    }
 }

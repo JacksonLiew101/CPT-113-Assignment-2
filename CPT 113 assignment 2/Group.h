@@ -8,7 +8,9 @@ class Group
 {
 private:
 	int score;
-	string player1_name, player2_name, groupname;
+	string player1_name;
+	string player2_name;
+	string groupname;
 public:
 	Group() {
 		score = 0;
@@ -20,7 +22,7 @@ public:
 		this->score = score;
 		this->player1_name = player1_name;
 		this->player2_name = player2_name;
-		this->groupname = groupname;
+		this->groupname = group_name;
 	}
 	void setScore(int s){
 		score = s;
@@ -49,7 +51,18 @@ public:
 	int addScore(int s) {
 		score += s;
 	}
-
+	bool compareStrings(string s1, string s2)
+	{
+		int compares = s1.compare(s2);
+		if (compares == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	};
 };
 
 #endif // !GROUP_H

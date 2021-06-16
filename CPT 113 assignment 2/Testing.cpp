@@ -141,3 +141,13 @@
 	cout << "In the discard pile: " << endl;
 	discardpile1.displayStack();
 */
+
+// test hand deck
+/*
+	cout << "After drawing a card: " << endl;
+    cout << "Group " << temp_group2.getGroupName() << endl;
+    current_deck->showHandCards();
+    cout << "Number of cards now: " << current_deck->getNumberOfHandCards();
+    cout << endl;
+    system("pause");
+*/

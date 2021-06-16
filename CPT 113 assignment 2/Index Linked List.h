@@ -3,6 +3,7 @@
 #define INDEXLINKEDLIST_H
 #include <iostream>
 using namespace std;
+
 template <class T>
 class IndexLinkedList
 {
@@ -15,7 +16,7 @@ private:
 
 	IndexNode* head;
 
-	public:
+public:
 	//constructor
 	IndexLinkedList()
 	{
@@ -32,10 +33,10 @@ private:
 	void appendNode(T);
 	void clearNode();
 	bool search(T) const;
-}
+};
 
 template <class T>
-void LinkedList<T>::appendNode(T newValue)
+void IndexLinkedList<T>::appendNode(T newValue)
 {
 	IndexNode *newNode;
 	IndexNode *nodePtr;
@@ -65,7 +66,7 @@ void LinkedList<T>::appendNode(T newValue)
 }
 
 template <class T>
-bool LinkedList<T>::search(T searchValue) const
+bool IndexLinkedList<T>::search(T searchValue) const
 {
 	IndexNode* nodePtr;
 	IndexNode* previousNode;
@@ -104,7 +105,7 @@ bool LinkedList<T>::search(T searchValue) const
 	}
 }
 template <class T>
-void IndexLinkedList<T>::clearNode();
+void IndexLinkedList<T>::clearNode()
 {
 	IndexNode* nodePtr;
 	IndexNode* nextNode;

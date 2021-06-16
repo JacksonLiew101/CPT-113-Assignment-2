@@ -63,5 +63,6 @@ public:
 		//cout << "{ " << getValue() << ", " << getColour() << ", " << getScore() << " }" << endl;
 		cout << "{ " << getValue() << ", " << getColour() << " }" << endl;
 	}
+	
 };
 #endif // !CARD_H
