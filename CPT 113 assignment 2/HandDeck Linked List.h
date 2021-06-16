@@ -32,17 +32,12 @@ public:
 	bool matchCard(C, C);	// done
 	void playCard(C, C&);	//	done
 	void drawCard(C);		// done
-	//void draw2Cards(C&); // at main function
-	//void draw4Cards(C&);// at main function
 	void showHandCards(); // done
-	//void initialHandCards(); // draw 5 cards/ at main function
-	//bool checkCardValidity(C);  no need this function
 	void showValidCard(C); // done
 	void copyValidChosenCard(int, C&); // done
 	void setHandDeckName(string); //done
 	string getHandDeckName(); //done
 	int getNumberOfHandCards(); //done
-	void clearNode();
 	bool searchIndex(int) const;
 	void clearIndexList();
 	int getIndexListLength();
@@ -269,16 +264,6 @@ void HandDeckLinkedList<C>::drawCard(C new_card)
 	NumberOfHandCards++;
 }
 
-/*template<class C>
-void HandDeckLinkedList<C>::draw2Cards(C&)
-{
-}
-
-template<class C>
-void HandDeckLinkedList<C>::draw4Cards(C&)
-{
-	
-}*/
 
 template<class C>
 void HandDeckLinkedList<C>::showHandCards()
@@ -315,18 +300,7 @@ void HandDeckLinkedList<C>::copyValidChosenCard(int index, C& temp_card)
 	}
 	temp_card.setCard(nodePtr->value.getValue(),nodePtr->value.getColour(), nodePtr->value.getScore());
 }
-/*template<class C>
-inline void HandDeckLinkedList<C>::initialHandCards()
-{
-	
-}
 
-template<class C>
-bool HandDeckLinkedList<C>::checkCardValidity(C)
-{
-	CardNode* nodePtr;
-	return false;
-}*/
 
 template<class C>
 void HandDeckLinkedList<C>::showValidCard(C searchCard)

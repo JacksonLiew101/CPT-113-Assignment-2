@@ -232,13 +232,6 @@ void GroupDoubleCircularLinkedList<G>::reverse() {
 	NextGroup();
 }
 
-/*
-template<class G, class C>
-string GroupDoubleCircularLinkedList<G, C>::getGroupNameFromList()
-{
-	return current->value.getGroupName();
-}
-*/
 
 template<class G>
 void GroupDoubleCircularLinkedList<G>::getCurrentNode(G& store_group) {

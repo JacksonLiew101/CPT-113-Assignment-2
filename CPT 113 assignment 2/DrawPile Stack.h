@@ -247,21 +247,12 @@ void DrawPileStack<C>::generateDeck()
 			newcard.setScore(5);
 		}
 
-		// before push testing
-		//cout << "This is before pushing" << endl;
-		//newcard.displayCard();
-		//system("pause");
 
 		// push this new cardNode into DrawPile Stack
 		pushCard(newcard);
-		//total++;
-		//cout << "After pushing" << endl;
-		//displayStack();
-		//system("pause");
+
 	}
 
-	//cout << "Total card is pushed:" << total << endl;
-	//system("pause");
 }
 
 template<class C>
