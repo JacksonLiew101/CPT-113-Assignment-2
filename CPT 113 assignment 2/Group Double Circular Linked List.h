@@ -1,11 +1,10 @@
 #ifndef GROUPDOUBLECIRCULARLINKEDLIST_H
 #define GROUPDOUBLECIRCULARLINKEDLIST_H
 #include"Group.h"
-//#include"HandDeck Linked List.h"
-//#include"Discard Pile Stack.h"
 
+
+// This is the template class for Group Double Circular Linked List
 template <class G>
-//inherit HandDeckLinkedList
 class GroupDoubleCircularLinkedList
 {
 private:

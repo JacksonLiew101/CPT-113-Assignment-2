@@ -1,4 +1,3 @@
-#pragma once
 #ifndef DISCARDPILESTACK_H
 #define DISCARDPILESTACK_H
 #include"Card.h"
@@ -6,6 +5,7 @@
 #include <string>
 using namespace std;
 
+// This is the template class for Discard Pile Stack
 template <class C>
 class DiscardPileStack
 {
@@ -17,33 +17,32 @@ private:
 	};
 	CardNode* top;
 	string action_statement;
-public:
-	//Constructor
-	DiscardPileStack(); // done
-	// Destructor
-	~DiscardPileStack(); // done
 
-	// Stack operations
-	bool isEmpty(); // done
+public:
+	DiscardPileStack(); 
+	~DiscardPileStack(); 
+	void setActionStatement(string);
+	string getActionStatement();
+	bool isEmpty(); 
 	void displayStack();
-	void push(C); // done
-	void peek(C&); // done
-	void setActionStatement(string action); // done
-	string getActionStatement(); // done
+	void push(C); 
+	void peek(C&); 
+	
 };
 
+// Constructor
 template <class C>
 DiscardPileStack<C>::DiscardPileStack()
 {
 	top = nullptr;
-	// later test condition must use ""
 	action_statement = "";
 }
 
+// Destructor
 template <class C>
 DiscardPileStack<C>::~DiscardPileStack()
 {
-	CardNode* Node_ptr;
+	CardNode* Node_ptr = nullptr;
 
 	// delete every card node until the stack is empty
 	while (!isEmpty()) {
@@ -55,17 +54,34 @@ DiscardPileStack<C>::~DiscardPileStack()
 	}
 }
 
+// Action Setter
+template<class C>
+void DiscardPileStack<C>::setActionStatement(string action)
+{
+	action_statement = action;
+}
+
+// Action Getter
+template<class C>
+string DiscardPileStack<C>::getActionStatement()
+{
+	return action_statement;
+}
+
+// Return true if the discard pile stack is empty
 template <class C>
 bool DiscardPileStack<C>::isEmpty() {
 	return (top == nullptr);
 }
 
+// Display all the cards available in the discard pile stack
 template<class C>
 void DiscardPileStack<C>::displayStack()
 {
-	CardNode* Node_ptr;
+	CardNode* Node_ptr = nullptr;
 	Node_ptr = top;
 
+	// display all the cards in the stack, from top to bottom stack
 	while (!(Node_ptr == nullptr)) {
 		Node_ptr->value.displayCard();
 		cout << endl;
@@ -73,6 +89,7 @@ void DiscardPileStack<C>::displayStack()
 	}
 }
 
+// Push the cards to the discard pile stack, only stores numbers and colours on the stack
 template<class C>
 void DiscardPileStack<C>::push(C new_card)
 {
@@ -84,17 +101,22 @@ void DiscardPileStack<C>::push(C new_card)
 	string Check_value = new_card.getValue();
 
 
-	// update action statement according to the new card
-	// only push stack if the new card is number card
-	if (new_card.compareStrings(Check_value, "Skip") || new_card.compareStrings(Check_value, "Reverse") || new_card.compareStrings(Check_value, "Draw Two") || new_card.compareStrings(Check_value, "Wild") || new_card.compareStrings(Check_value, "Wild Draw Four"))
+	// Update action statement according to the last card played
+	// Only push number card to stack without changing values
+	// For action cards, change the action statement and colour but remain the previous top stack number values
+	if (new_card.compareStrings(Check_value, "Skip") 
+		|| new_card.compareStrings(Check_value, "Reverse") 
+		|| new_card.compareStrings(Check_value, "Draw Two") 
+		|| new_card.compareStrings(Check_value, "Wild") 
+		|| new_card.compareStrings(Check_value, "Wild Draw Four"))
 	{
+		// Override the colour of the top stack card, no need push card
+		top->value.setColour(new_card.getColour()); 
 		setActionStatement(Check_value);
-		top->value.setColour(new_card.getColour()); // override the top colour with the action card colour
 	}
-	else // if it is a number card
+	else // If it is a number card, then only push card to the stack
 	{
 		setActionStatement("");
-		
 		
 		if (isEmpty()) {
 			// This means it will be the first node, make top point to new node
@@ -109,27 +131,13 @@ void DiscardPileStack<C>::push(C new_card)
 		}
 	}
 
-	
-
-	
 }
 
+// Peek the top card and store to a temp card object
 template<class C>
 void DiscardPileStack<C>::peek(C &store_card)
 {
 	store_card.setCard(top->value.getValue(), top->value.getColour(), top->value.getScore());
-}
-
-template<class C>
-void DiscardPileStack<C>::setActionStatement(string action)
-{
-	action_statement = action;
-}
-
-template<class C>
-string DiscardPileStack<C>::getActionStatement()
-{
-	return action_statement;
 }
 
 #endif // !DISCARDPILESTACK_H

@@ -1,12 +1,12 @@
-#pragma once
 #ifndef HANDDECKLINKEDLIST_H
 #define HANDDECKLINKEDLIST_H
-#include<iostream>
-#include <string>
 #include "DrawPile Stack.h"
 #include "Index Linked List.h"
+#include<iostream>
+#include <string>
 using namespace std;
 
+// This is the template class for Hand Deck Linked List
 template <class C >
 class HandDeckLinkedList
 {

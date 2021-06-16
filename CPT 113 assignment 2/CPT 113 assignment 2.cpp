@@ -10,6 +10,7 @@ const int STARTING_CARD_NO = 5;
 void Welcome();
 void Rule();
 void UpdateHandDeckPtr(Group, HandDeckLinkedList<Card> *&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+void End();
 
 int main() {
     // Data Structures, Objects and Variables needed
@@ -29,8 +30,8 @@ int main() {
     int player_choice_card_index = 0;
     string group_name, player1_name, player2_name, action;
     string group_list = "ABCD";
-    bool winner_flag = false;
-    
+    bool winner_flag = false; 
+
     Welcome();
     Rule();
     do
@@ -272,32 +273,65 @@ void Welcome()
 {
  
 
-    cout << "\t**************************************************************" << endl
+    cout << "\t*****************************************************************************************************************************************************" << endl
          << endl; //Greet the user
-    cout << "\t\t\tWelcome to the UNO card multiplayer games"  << endl
+    cout<<"\t\t                                                                                                   .         .                          \n";
+    cout<<"\t\t `8.`888b                 ,8' 8 8888888888   8 8888         ,o888888o.        ,o888888o.           ,8.       ,8.          8 8888888888   \n";
+    cout<<"\t\t  `8.`888b               ,8'  8 8888         8 8888        8888     `88.   . 8888     `88.        ,888.     ,888.         8 8888         \n";
+    cout<<"\t\t   `8.`888b             ,8'   8 8888         8 8888     ,8 8888       `8. ,8 8888       `8b      .`8888.   .`8888.        8 8888         \n";
+    cout<<"\t\t    `8.`888b     .b    ,8'    8 8888         8 8888     88 8888           88 8888        `8b    ,8.`8888. ,8.`8888.       8 8888         \n";
+    cout<<"\t\t    `8.`888b    88b  ,8'     8 888888888888 8 8888     88 8888           88 8888         88   ,8'8.`8888,8^8.`8888.      8 888888888888  \n";
+    cout<<"\t\t      `8.`888b .`888b,8'      8 8888         8 8888     88 8888           88 8888         88  ,8' `8.`8888' `8.`8888.     8 8888         \n";
+    cout<<"\t\t       `8.`888b8.`8888'       8 8888         8 8888     88 8888           88 8888        ,8P ,8'   `8.`88'   `8.`8888.    8 8888         \n";
+    cout<<"\t\t        `8.`888`8.`88'        8 8888         8 8888     `8 8888       .8' `8 8888       ,8P ,8'     `8.`'     `8.`8888.   8 8888         \n";
+    cout<<"\t\t        `8.`8' `8,`'         8 8888         8 8888        8888     ,88'   ` 8888     ,88' ,8'       `8        `8.`8888.  8 8888          \n";
+    cout<<"\t\t         `8.`   `8'          8 888888888888 8 888888888888 `8888888P'        `8888888P'  ,8'         `         `8.`8888. 8 888888888888  \n"
          << endl;
+    cout<<"\t\t\t\t\t\t\t\t8888888 8888888888 ,o888888o.     \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888    . 8888     `88.   \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888   ,8 8888       `8b  \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888   88 8888        `8b \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888   88 8888         88 \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888   88 8888         88 \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888   88 8888        ,8P \n";
+	cout<<"\t\t\t\t\t\t\t\t     8 8888   `8 8888       ,8P  \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888    ` 8888     ,88'   \n";
+	cout<<"\t\t\t\t\t\t\t\t      8 8888       `8888888P'     \n";   
+	cout << endl;
+    cout<<"\t\t\t\t\t\t8 8888      88           b.             8               ,o888888o.     \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           888o.          8            . 8888     `88.   \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           Y88888o.       8           ,8 8888       `8b  \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           .`Y888888o.    8           88 8888        `8b \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           8o. `Y888888o. 8           88 8888         88 \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           8`Y8o. `Y88888o8           88 8888         88 \n";
+    cout<<"\t\t\t\t\t\t8 8888      88           8   `Y8o. `Y8888           88 8888        ,8P \n";
+    cout<<"\t\t\t\t\t\t  8888     ,8P           8      `Y8o. `Y8           `8 8888       ,8P   \n";
+    cout<<"\t\t\t\t\t\t  8888   ,d8P            8         `Y8o.`            ` 8888     ,88'    \n";
+    cout<<"\t\t\t\t\t\t   `Y88888P'             8            `Yo               `8888888P'     \n";
+    cout << endl;
+    
     cout << "\t\t\tBefore starting the game, please go through the README text file in the same folders for the instruction and game rules" << endl
          << endl;
-    cout << "\t**************************************************************" << endl
+    cout << "\t*****************************************************************************************************************************************************" << endl
          << endl;
     system("pause");
 }
 
 void Rule()
 {
-        cout << "\t**************************************************************" << endl
+    cout << "\t*****************************************************************************************************************************************************" << endl
          << endl; //Greet the user
     cout << "\t\t\tThis game is a multiplayer game."  << endl
          << endl;
-             cout << "\t\t\tSpecifically, you should have at least 2 groups of players for the gameplay and each group will involve 2 players playing the same deck."  << endl
+             cout << "\t\t\tSpecifically, you should have at least 2 groups of players for the gameplay and \n\t\t\teach group will involve 2 players playing the same deck."  << endl
          << endl;
-             cout << "\t\t\tTo win the game, the 2 players of the same group should" << endl
-                 << "1.accumulate the highest scores when the Draw Pile is empty or,\n"
-                 << "2. be the first group which empty the Hand Decks\n"
-             << "3. be the last group in the game\n"
+             cout << "\t\t\tTo win the game, the 2 players of the same group should:" << endl
+                 << "\t\t\t1.accumulate the highest scores when the Draw Pile is empty or,\n"
+                 << "\t\t\t2. be the first group which empty the Hand Decks\n"
+                << "\t\t\t3. be the last group in the game\n"
          << endl;
-    cout << "\t**************************************************************" << endl
-         << endl;
+    cout << "\t*****************************************************************************************************************************************************" << endl
+         << endl;     
     system("pause");
 }
 
@@ -318,4 +352,31 @@ void UpdateHandDeckPtr(Group temp_group, HandDeckLinkedList<Card> *&current_deck
     else {
         cout << "There is a problem in the retrieve group name\n";
     }
+}
+
+void end()
+{
+    cout << endl;  
+    cout << endl;                                                                                                                                                
+   cout << "\t*****************************************************************************************************************************************************" << endl
+         << endl; //goodbye message
+    cout<<"\t8888888 8888888888 8 8888        8          .8.          b.             8 8 8888     ,88'           `8.`8888.      ,8'  ,o888888o.     8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8         .888.         888o.          8 8 8888    ,88'             `8.`8888.    ,8'. 8888     `88.   8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8        :88888.        Y88888o.       8 8 8888   ,88'               `8.`8888.  ,8',8 8888       `8b  8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8       . `88888.       .`Y888888o.    8 8 8888  ,88'                 `8.`8888.,8' 88 8888        `8b 8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8      .8. `88888.      8o. `Y888888o. 8 8 8888 ,88'                   `8.`88888'  88 8888         88 8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8     .8`8. `88888.     8`Y8o. `Y88888o8 8 8888 88'                     `8. 8888   88 8888         88 8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888888888888    .8' `8. `88888.    8   `Y8o. `Y8888 8 888888<                       `8 8888   88 8888        ,8P 8 8888      88 \n";
+    cout<<"\t      8 8888       8 8888        8   .8'   `8. `88888.   8      `Y8o. `Y8 8 8888 `Y8.                      8 8888   `8 8888       ,8P  ` 8888     ,8P \n";
+    cout<<"\t      8 8888       8 8888        8  .888888888. `88888.  8         `Y8o.` 8 8888   `Y8.                    8 8888    ` 8888     ,88'     8888   ,d8P  \n";
+    cout<<"\t      8 8888       8 8888        8 .8'       `8. `88888. 8            `Yo 8 8888     `Y8.                  8 8888       `8888888P'        `Y88888P'   \n";   
+
+    cout << endl
+         << endl;
+    cout << "\t\t\t\t\t\t\t\t\t     Thank you for playing!" << endl
+         << endl;
+    cout << "\t\t\t\t\t\t\t\t\t      Hope to see you again!" << endl
+         << endl;                                                               
+     cout << "\t*****************************************************************************************************************************************************" << endl
+         << endl; 
 }

@@ -1,9 +1,9 @@
-#pragma once
 #ifndef INDEXLINKEDLIST_H
 #define INDEXLINKEDLIST_H
 #include <iostream>
 using namespace std;
 
+// This is the template class for Index Linked List
 template <class T>
 class IndexLinkedList
 {

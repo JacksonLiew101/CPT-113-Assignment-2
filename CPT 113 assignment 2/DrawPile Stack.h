@@ -1,69 +1,50 @@
 #ifndef DRAWPILE_STACK_H
 #define DRAWPILE_STACK_H
-#include<iostream>
-#include<string>
+#include "Card.h" 
+#include <iostream>
+#include <string>
 #include <stdlib.h>
 #include <time.h>
-#include "Card.h" 
 using namespace std;
+
+// Constants for initialising card decks
 const int NUMBER_OF_LABELS = 2; // value and colour
 const int NUMBER_OF_CARDS = 40; 
 
+// This is the template class for Draw Pile Stack
 template <class C>
 class DrawPileStack
 {
 private:
-	//structure for the queue node
 	struct CardNode
 	{
-		C value; // value in a node
-		struct CardNode* next; // pointer to the next node
+		C value; 
+		CardNode* next;
 	};
 	CardNode* top;
 	
 public:
-	//constructor
-	DrawPileStack(); // done
-	//destructor
-	~DrawPileStack(); // done
-	bool isEmpty(); // done
-	void pushCard(C); // done
-	void popCard(C&); // done
-	void generateDeck(); // done
-	void swap(int*, int*); // done
-	void randomize(int arr[], int n); // done
-	void displayStack(); // done
-	void setStackCard(string, string,int); // done
+	DrawPileStack(); 
+	~DrawPileStack(); 
+	bool isEmpty(); 
+	void displayStack();
+	void pushCard(C); 
+	void popCard(C&); 
+	void generateDeck(); 
+	void swap(int*, int*); 
+	void randomize(int arr[], int n); 
+
 };
 
-template <class C>
-void DrawPileStack<C>::setStackCard(string v, string c, int s)
-{
-	top->value.setValue(v);
-	top->value.setColour(c);
-	top->value.setScore(s);
-
-}
-
-template <class C>
-void DrawPileStack<C>::displayStack()
-{
-	CardNode* Node_ptr;
-	Node_ptr = top;
-
-	while (!(Node_ptr==nullptr)) {
-		Node_ptr->value.displayCard();
-		cout << endl;
-		Node_ptr = Node_ptr->next;
-	}
-}
-
+// Constructor
 template <class C>
 DrawPileStack<C>::DrawPileStack() {
 	top = nullptr;
+	// Automatically generate the whole randomised deck at the start
 	generateDeck();
 }
 
+// Destructor
 template <class C>
 DrawPileStack<C>::~DrawPileStack() {
 	CardNode* Node_ptr = nullptr;
@@ -78,11 +59,28 @@ DrawPileStack<C>::~DrawPileStack() {
 	}
 }
 
+// Return true if the Draw Pile Stack is empty
 template <class C>
 bool DrawPileStack<C>::isEmpty() {
 	return (top == nullptr);
 }
 
+// Display all the cards in the Draw Pile Stack
+template <class C>
+void DrawPileStack<C>::displayStack()
+{
+	CardNode* Node_ptr;
+	Node_ptr = top;
+
+	// Display every cards available on the stack
+	while (!(Node_ptr == nullptr)) {
+		Node_ptr->value.displayCard();
+		cout << endl;
+		Node_ptr = Node_ptr->next;
+	}
+}
+
+// Push the card into the Stack
 template<class C>
 void DrawPileStack<C>::pushCard(C new_card)
 {
@@ -103,19 +101,16 @@ void DrawPileStack<C>::pushCard(C new_card)
 		// Update top to point to new node
 		top = New_node;
 	}
-
-	//cout << "Inside pushing" << endl;
-	//top->value.displayCard();
-	//system("pause");
 }
 
+// Pop the card to the group player's handdeck during gameplay
 template <class C>
 void DrawPileStack<C>::popCard(C& value) {
-	// tracker
+
 	CardNode* Node_ptr = nullptr;
 
 	if (isEmpty()) {
-		cout << "The Draw Pile is now empty" << endl;
+		cout << "The Draw Pile is now empty. It is end of the game!" << endl;
 	}
 	else {
 		// point temp pointer to the top first
@@ -132,11 +127,15 @@ void DrawPileStack<C>::popCard(C& value) {
 	}
 };
 
+/*
+	General functions for initialisation of random order card deck
+*/
+// Generate a fully randomised deck and push all cards to the stack
 template <class C>
 void DrawPileStack<C>::generateDeck() 
 {
-	//int total = 0;
-	
+	// Arrays are just use as means to random reorder everything
+	// Cards details will be stored as nodes and put together as a stack
 	int labels[NUMBER_OF_CARDS] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39};
 	string Cards[NUMBER_OF_CARDS][NUMBER_OF_LABELS] =
 	{
@@ -191,10 +190,10 @@ void DrawPileStack<C>::generateDeck()
 	};
 	int n = 40;
 	randomize(labels, n);
-	Card newcard; // create a new card class
+	Card newcard; // to store the card details temporary before pushing into stack
+
 	for(int i = 0; i<NUMBER_OF_CARDS; i++)
 	{
-	
 		//Card newcard;
 		int a = labels[i];
 		string temp;
@@ -210,19 +209,23 @@ void DrawPileStack<C>::generateDeck()
 				newcard.setColour(temp);
 			}
 		}
-		//set the scores for each card
-		// if it is skip, reverse, draw two, score is 20 points
-		if(newcard.compareStrings(newcard.getValue(),"Skip") || newcard.compareStrings(newcard.getValue(),"Reverse") ||newcard.compareStrings(newcard.getValue(),"Draw Two" ) )
+
+		// Set the scores for each card
+		// If it is skip, reverse, draw two, score is 20 points
+		if(newcard.compareStrings(newcard.getValue(),"Skip") 
+			|| newcard.compareStrings(newcard.getValue(),"Reverse") 
+			||newcard.compareStrings(newcard.getValue(),"Draw Two" ) )
 		{
 			newcard.setScore(20);
 		}
-		//if it is wild and wild draw four, score is 50 points
-		else if(newcard.compareStrings(newcard.getValue(),"Wild") || newcard.compareStrings(newcard.getValue(),"Wild Draw Four") )
+		// If it is wild and wild draw four, score is 50 points
+		else if(newcard.compareStrings(newcard.getValue(),"Wild") 
+			|| newcard.compareStrings(newcard.getValue(),"Wild Draw Four") )
 		{
 			newcard.setScore(50);
 		}
 
-		// if it is number card, score is according to the number value
+		// If it is number card, score is according to the number value
 		if(newcard.compareStrings(newcard.getValue(),"1") )
 		{
 			newcard.setScore(1);
