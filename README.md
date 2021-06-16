@@ -1,4 +1,4 @@
-# CPT-113-Assignment-2
+# CPT-113-Assignment-2 UNO GAMES
 Game Rules 
 
 Game rule is mainly based on https://www.unorules.com/, however, refer to the rules below for slight modification for the game program. 
