@@ -40,6 +40,7 @@ public:
 	//string getGroupNameFromList(); // done, probably need to removed
 	void getCurrentNode(G&);
 	int getPlayerTurn();
+	void updateGroupScore(G);
 };
 
 //constructor
@@ -50,7 +51,7 @@ GroupDoubleCircularLinkedList<G>::GroupDoubleCircularLinkedList()
 	current = nullptr;
 	flag_reverse = false;
 	no_of_group = 0;
-	player_turn = 1;
+	player_turn = 0;
 }
 
 //destructor
@@ -240,6 +241,11 @@ void GroupDoubleCircularLinkedList<G>::getCurrentNode(G& store_group) {
 template<class G>
 int GroupDoubleCircularLinkedList<G>::getPlayerTurn() {
 	return player_turn;
+}
+
+template<class G>
+void GroupDoubleCircularLinkedList<G>::updateGroupScore(G group) {
+	current->value.setGroup(group.getScore(), group.getPlayer1Name(), group.getPlayer2Name(), group.getGroupName());
 }
 
 #endif // !GROUPDOUBLECIRCULARLINKEDLIST_H

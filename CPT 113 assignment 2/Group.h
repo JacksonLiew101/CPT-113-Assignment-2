@@ -48,7 +48,7 @@ public:
 	string getGroupName() const {
 		return groupname;
 	}
-	int addScore(int s) {
+	void addScore(int s) {
 		score += s;
 	}
 	bool compareStrings(string s1, string s2)

@@ -27,8 +27,10 @@ int main() {
     Group temp_group;
     Group temp_group2;
     int number_of_groups = 0;
+    int player_choice_card_index = 0;
     string group_name, player1_name, player2_name, action;
     string group_list = "ABCD";
+    bool winner_flag = false;
     
     Welcome();
     Rule();
@@ -89,9 +91,140 @@ int main() {
     
 
     //start game
+    //before starting the card details is stored in the temp_card
+    while (!winner_flag) {
+        
+        // check action
+        action = discardpile.getActionStatement();
+
+        if (action == "Reverse")
+        {
+            // change direction of the gameplay 
+            groupsinplay.reverse();
+            groupsinplay.getCurrentNode(temp_group);
+            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+            
+        }
+        else if (action == "Skip") {
+            // skip the next player in turn
+            groupsinplay.skipTurn();
+            groupsinplay.getCurrentNode(temp_group);
+            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+        }
+        else {
+            // for cards that don't involve changing player turns by force
+            groupsinplay.NextGroup();
+            groupsinplay.getCurrentNode(temp_group);
+            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+
+            if (action == "Draw Two") {
+                for (int i = 0; i < 2; i++) {
+                    drawpile.popCard(temp_card);
+                    current_deck->drawCard(temp_card);
+                }
+            }
+
+            if (action == "Wild Draw Four") {
+                for (int i = 0; i < 4; i++) {
+                    drawpile.popCard(temp_card);
+                    current_deck->drawCard(temp_card);
+                }
+            }
+        }
+        
+        // for player starts to check card, update back the card to the card at the top of discard pile first
+        discardpile.peek(temp_card);
 
 
+        // interface for gameplay
+        //system("cls");
+        cout << "\t\t\t" << "Current Number Card" << endl;
+        cout << "\t\t\t";
+        temp_card.displayCard();
 
+        // display message for action cards (if exist)
+        if (action == "Draw Two") {
+            cout << "\n\n'Draw Two' card is used. 2 cards is drawed to your hand deck\n\n";
+        }
+        else if (action == "Wild Draw Four") {
+            cout << "\n\n'Wild Draw Four' card is used. 4 cards is drawed to your hand deck.\n" 
+                 << temp_card.getColour() << " is the new colour.\n\n";
+        }
+        else if (action == "Wild") {
+            cout << "\n\n'Wild' card is used.\n"
+                << temp_card.getColour() << " is the new colour.\n\n";
+        }
+        else if (action == "Skip") {
+            cout << "\n\n'Skip' card is used. It is your turn now.\n\n";
+        }
+        else if (action == "Reverse") {
+            cout << "\n\n'Reverse' card is used. Direction is changed. It is your turn now.\n\n";
+        }
+        else {
+            cout << "\n\n";
+        }
+
+        cout << "\t\t\tYour turn now!\n";
+        if (groupsinplay.getPlayerTurn() == 0) {
+            cout << temp_group.getPlayer1Name() << " from Group " << temp_group.getGroupName() << endl;
+        }
+        else {
+            cout << temp_group.getPlayer2Name() << " from Group " << temp_group.getGroupName() << endl;
+        }
+
+         //first, show all the hand cards
+        cout << "This is your current hand cards\n";
+        current_deck->showHandCards();
+         cout << "\n\n";
+        //second, show all the valid cards
+        current_deck->showValidCard(temp_card);
+        while (current_deck->showIndexLinkedListHead() == 0)
+        {
+            cout <<"Looks like you don't have any valid card in your hand\n";
+            cout << "You need to draw one more card until you have at least 1 valid card\n";
+            system("pause");
+            if(current_deck->showIndexLinkedListHead() == 0)
+            {
+                current_deck->clearIndexList();
+                drawpile.popCard(temp_card);
+                current_deck->drawCard(temp_card);
+                cout << endl << endl;
+                current_deck->showHandCards();
+                current_deck->showValidCard(temp_card);
+            }
+        }
+
+        cout << endl;
+        //prompt the valid card index
+        do
+        {
+            cout << "Please play a card(choose the valid card index): ";
+            cin >> player_choice_card_index;
+            if(current_deck->searchIndex(player_choice_card_index) == false)
+            {
+            cout << "Invalid input. Please choose a valid card index\n";
+            }
+        } while (current_deck->searchIndex(player_choice_card_index) == false);
+
+        //after getting the valid card index, use that card index to copy the card to temp card
+        current_deck->copyValidChosenCard(player_choice_card_index, choose_card);
+
+        //play that card and save that card into temp_card
+        current_deck->playCard(choose_card, temp_card);
+        current_deck->showIndexLinkedList();
+        //add score to the group
+        temp_group.addScore(temp_card.getScore());
+        groupsinplay.updateGroupScore(temp_group);
+
+        //after played that card, need to clear the index linked list
+        current_deck->clearIndexList();
+        //send that out card to discard pile
+        discardpile.push(temp_card);
+        // end this turn, go to the next player by repeating this loop
+    }
+
+
+  
 	return 0;
 }
 

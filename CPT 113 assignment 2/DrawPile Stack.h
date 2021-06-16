@@ -53,6 +53,7 @@ void DrawPileStack<C>::displayStack()
 
 	while (!(Node_ptr==nullptr)) {
 		Node_ptr->value.displayCard();
+		cout << endl;
 		Node_ptr = Node_ptr->next;
 	}
 }

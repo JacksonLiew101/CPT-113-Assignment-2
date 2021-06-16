@@ -61,7 +61,7 @@ public:
 	};
 	void displayCard() {
 		//cout << "{ " << getValue() << ", " << getColour() << ", " << getScore() << " }" << endl;
-		cout << "{ " << getValue() << ", " << getColour() << " }" << endl;
+		cout << "{ " << getValue() << ", " << getColour() << " }";
 	}
 	
 };

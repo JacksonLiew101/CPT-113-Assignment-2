@@ -27,7 +27,7 @@ public:
 	bool isEmpty(); // done
 	void displayStack();
 	void push(C); // done
-	C peek(); // done
+	void peek(C&); // done
 	void setActionStatement(string action); // done
 	string getActionStatement(); // done
 };
@@ -68,6 +68,7 @@ void DiscardPileStack<C>::displayStack()
 
 	while (!(Node_ptr == nullptr)) {
 		Node_ptr->value.displayCard();
+		cout << endl;
 		Node_ptr = Node_ptr->next;
 	}
 }
@@ -114,9 +115,9 @@ void DiscardPileStack<C>::push(C new_card)
 }
 
 template<class C>
-C DiscardPileStack<C>::peek()
+void DiscardPileStack<C>::peek(C &store_card)
 {
-	return top->value;
+	store_card.setCard(top->value.getValue(), top->value.getColour(), top->value.getScore());
 }
 
 template<class C>

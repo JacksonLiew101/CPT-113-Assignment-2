@@ -38,13 +38,79 @@ public:
 	//void initialHandCards(); // draw 5 cards/ at main function
 	//bool checkCardValidity(C);  no need this function
 	void showValidCard(C); // done
-	C copyValidChosenCard(int); // done
+	void copyValidChosenCard(int, C&); // done
 	void setHandDeckName(string); //done
 	string getHandDeckName(); //done
 	int getNumberOfHandCards(); //done
+	void clearNode();
+	bool searchIndex(int) const;
+	void clearIndexList();
+	int getIndexListLength();
+	void promptColour(int& choice, string& colour_change);
+	void showIndexLinkedList();
+	int showIndexLinkedListHead();
 };
 
 
+template <class C>
+int HandDeckLinkedList<C>::showIndexLinkedListHead()
+{
+	return Indexes.showHeadValue();
+}
+
+template <class C>
+void HandDeckLinkedList<C>::showIndexLinkedList()
+{
+	return Indexes.displayList();
+}
+template <class C>
+int HandDeckLinkedList<C>::getIndexListLength()
+{
+	return Indexes.getlength();
+}
+template<class C>
+void HandDeckLinkedList<C>::promptColour(int& choice, string& colour_change)
+{
+	cout << "\nWhat colour do you pick now?\n";
+	cout << "1. Red 2. Green 3. Blue 4. Yellow\n";
+	do {
+		cout << "->";
+		cin >> choice;
+
+		if (choice < 1 || choice > 4) {
+			cout << "Invalid colour choice. Try again\n";
+		}
+
+	} while (choice < 1 || choice >4);
+	switch (choice)
+	{
+	case 1:
+		colour_change = "Red";
+		break;
+	case 2:
+		colour_change = "Green";
+		break;
+	case 3:
+		colour_change = "Blue";
+		break;
+	case 4:
+		colour_change = "Yellow";
+		break;
+	default:
+		cout << "Invalid colour detected\n";
+		break;
+	}
+}
+template <class C>
+void HandDeckLinkedList<C>::clearIndexList()
+{
+	Indexes.clearNode();
+}
+template <class C>
+bool HandDeckLinkedList<C>::searchIndex(int index) const
+{
+	return Indexes.search(index);
+}
 template <class C>
 int HandDeckLinkedList<C>::getNumberOfHandCards()
 {
@@ -115,6 +181,7 @@ void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 	// create two pointer trackers
 	CardNode* Node_ptr = nullptr;
 	CardNode* Previous_node = nullptr;
+	int Choice = 0;
 	string Colour_change = "";
 
 	// should I add check empty list, because I already pre-checked everything at
@@ -125,11 +192,10 @@ void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 	if (matchCard(head->value, card)) {
 		// store the value of the card first
 		// before playing the "Wild" or "Wild Draw Four", must states the colour first
-		if (card.compareStrings(head->value.getValue(),"Wild") || card.compareStrings(head->value.getValue(),"Wild Draw Four")) {
-			out_card.setCard(head->value.getValue(),head->value.getColour(), head->value.getScore());
+		if (card.compareStrings(head->value.getValue(), "Wild") || card.compareStrings(head->value.getValue(), "Wild Draw Four")) {
+			out_card.setCard(head->value.getValue(), head->value.getColour(), head->value.getScore());
 			// prompt to change colour
-			cout << "\nWhat colour do you pick now? ->" << endl;
-			cin >> Colour_change;
+			promptColour(Choice, Colour_change);
 			out_card.setColour(Colour_change);
 		}
 		else {
@@ -156,8 +222,7 @@ void HandDeckLinkedList<C>::playCard(C card, C& out_card)
 				out_card.setCard(Node_ptr->value.getValue(),Node_ptr->value.getColour(), Node_ptr->value.getScore());
 		
 				// prompt to change colour
-				cout << "\nWhat colour do you pick now? ->" << endl;
-				cin >> Colour_change;
+				promptColour(Choice, Colour_change);
 				out_card.setColour(Colour_change);
 			}
 			else {
@@ -224,7 +289,8 @@ void HandDeckLinkedList<C>::showHandCards()
 
 	while(nodePtr)
 	{
-		cout << nodePtr->value.getValue() << " " << nodePtr->value.getColour() << " | ";
+		nodePtr->value.displayCard();
+		cout << " | ";
 		nodePtr = nodePtr->next;
 	}
 	cout << endl;
@@ -232,7 +298,7 @@ void HandDeckLinkedList<C>::showHandCards()
 
 
 template<class C>
-C HandDeckLinkedList<C>::copyValidChosenCard(int index)
+void HandDeckLinkedList<C>::copyValidChosenCard(int index, C& temp_card)
 {
 	CardNode* nodePtr;
 	int i = 0;
@@ -241,12 +307,13 @@ C HandDeckLinkedList<C>::copyValidChosenCard(int index)
 	while(!(nodePtr == nullptr))
 	{
 		i++;
-		if(i == (index))
+		if(i == index)
 		{
-			return nodePtr->value;
+			break;
 		}
 		nodePtr = nodePtr->next;
 	}
+	temp_card.setCard(nodePtr->value.getValue(),nodePtr->value.getColour(), nodePtr->value.getScore());
 }
 /*template<class C>
 inline void HandDeckLinkedList<C>::initialHandCards()
@@ -283,6 +350,7 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 	nodePtr = head;
 	string Check_value = searchCard.getValue();
 	cout << "These are the cards that can be used: ";
+	
 	while(!(nodePtr == nullptr))
 	{
 		i++;
@@ -292,13 +360,18 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 			//If this node is the last card in the hand
 			if(nodePtr->next == nullptr)
 			{
-				cout << i<< ". { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
+				cout << i << ". ";
+				nodePtr->value.displayCard();
+				cout << "\n";
 			}
 			else
 			{
-				cout <<i<< " { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
+				cout << i << ". ";
+				nodePtr->value.displayCard();
+				cout << " , ";
 			}
 			Indexes.appendNode(i);
+			
 		}
 		//for wild card
 		//wild card always can be used
@@ -307,16 +380,22 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 			//If this node is the last card in the hand
 			if(nodePtr->next == nullptr)
 			{
-				cout << i<<" { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << "\n";
+				cout << i << ". ";
+				nodePtr->value.displayCard();
+				cout << "\n";
 			}
 			else
 			{
-				cout <<i<< " { " << nodePtr->value.getValue() << ", " << nodePtr->value.getColour() << " }" << " , ";
+				cout << i << ". ";
+				nodePtr->value.displayCard();
+				cout << " , ";
 			}
 			Indexes.appendNode(i);
+			
 		}
 		nodePtr = nodePtr->next;
 	}
-
 }
+
+
 #endif // !HANDDECKLINKEDLIST_H
