@@ -2,12 +2,13 @@
 #include"HandDeck Linked List.h"
 #include"Discard Pile Stack.h"
 #include"DrawPile Stack.h"
-
 #include<iostream>
 #include<string>
 using namespace std;
+
 const int STARTING_CARD_NO = 5;
 const int MAXIMUM_CARD_NO = 10;
+
 void Welcome();
 void Rule();
 void UpdateHandDeckPtr(Group, HandDeckLinkedList<Card> *&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
@@ -18,17 +19,11 @@ int main() {
     DrawPileStack<Card> drawpile;
     DiscardPileStack<Card> discardpile;
     GroupDoubleCircularLinkedList<Group> groupsinplay;
-    //IndexLinkedList indexvalidcard;???
-    HandDeckLinkedList<Card> HandDeckA;
-    HandDeckLinkedList<Card> HandDeckB;
-    HandDeckLinkedList<Card> HandDeckC;
-    HandDeckLinkedList<Card> HandDeckD;
+    HandDeckLinkedList<Card> HandDeckA, HandDeckB, HandDeckC, HandDeckD;
     HandDeckLinkedList<Card>* current_deck = nullptr;
-    Card temp_card;
-    Card choose_card;
+    Card temp_card, choose_card;
     Group temp_group;
-    int number_of_groups = 0;
-    int player_choice_card_index = 0;
+    int number_of_groups = 0, player_choice_card_index = 0;
     string group_name, player1_name, player2_name, action;
     string group_list = "ABCD";
     bool winner_flag = false; 
@@ -188,6 +183,8 @@ int main() {
          if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
              //remove the group
              groupsinplay.RemoveGroup();
+             //reset the action 
+             discardpile.setActionStatement("");
              //update to the remaining group
              groupsinplay.getCurrentNode(temp_group);
          }
@@ -210,7 +207,6 @@ int main() {
                      }
                      current_deck->drawCard(choose_card);
                      cout << endl << endl;
-                     temp_card.displayCard();
                      current_deck->showHandCards();
                      current_deck->showValidCard(temp_card);
                  }
@@ -264,8 +260,9 @@ int main() {
     cout << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
     cout << "Group " << temp_group.getGroupName() << " wins the game!!!!\n";
     cout << "With a score of " << temp_group.getScore();
-    cout << "\n\nThe game is now ended. To play again, run the game program file from the folder.\n";
+    system("pause");
 
+    End();
   
 	return 0;
 }
@@ -355,7 +352,7 @@ void UpdateHandDeckPtr(Group temp_group, HandDeckLinkedList<Card> *&current_deck
     }
 }
 
-void end()
+void End()
 {
     cout << endl;  
     cout << endl;                                                                                                                                                
