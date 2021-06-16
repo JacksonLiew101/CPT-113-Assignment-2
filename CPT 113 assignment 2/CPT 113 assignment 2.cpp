@@ -119,6 +119,9 @@ int main() {
             if (action == "Draw Two") {
                 for (int i = 0; i < 2; i++) {
                     drawpile.popCard(temp_card);
+                    if (drawpile.isEmpty()) {
+                        winner_flag = true;
+                    }
                     current_deck->drawCard(temp_card);
                 }
             }
@@ -126,6 +129,9 @@ int main() {
             if (action == "Wild Draw Four") {
                 for (int i = 0; i < 4; i++) {
                     drawpile.popCard(temp_card);
+                    if (drawpile.isEmpty()) {
+                        winner_flag = true;
+                    }
                     current_deck->drawCard(temp_card);
                 }
             }
@@ -174,57 +180,68 @@ int main() {
          //first, show all the hand cards
         cout << "This is your current hand cards\n";
         current_deck->showHandCards();
-         cout << "\n\n";
-        //second, show all the valid cards
-        current_deck->showValidCard(temp_card);
-        while (current_deck->showIndexLinkedListHead() == 0)
-        {
-            cout <<"Looks like you don't have any valid card in your hand\n";
-            cout << "You need to draw one more card until you have at least 1 valid card\n";
-            system("pause");
-            if(current_deck->showIndexLinkedListHead() == 0)
-            {
-                current_deck->clearIndexList();
-                drawpile.popCard(temp_card);
-                current_deck->drawCard(temp_card);
-                cout << endl << endl;
-                current_deck->showHandCards();
-                current_deck->showValidCard(temp_card);
-            }
-        }
+        cout << "\n\n";
 
-        cout << endl;
-        //prompt the valid card index
-        do
-        {
-            cout << "Please play a card(choose the valid card index): ";
-            cin >> player_choice_card_index;
-            if(current_deck->searchIndex(player_choice_card_index) == false)
-            {
-            cout << "Invalid input. Please choose a valid card index\n";
-            }
-        } while (current_deck->searchIndex(player_choice_card_index) == false);
+         // check current hand card >10, drop group
+         if (current_deck->getNumberOfHandCards() > 10) {
+             //remove the group
+             groupsinplay.RemoveGroup();
+             //update to the remaining group
+             groupsinplay.getCurrentNode(temp_group);
+         }
+         else
+         {
+             //second, show all the valid cards, if still less than 10 cards
+             current_deck->showValidCard(temp_card);
+             while (current_deck->showIndexLinkedListHead() == 0 && !drawpile.isEmpty())
+             {
+                 cout << "Looks like you don't have any valid card in your hand\n";
+                 cout << "You need to draw one more card until you have at least 1 valid card\n";
+                 system("pause");
+                 if (current_deck->showIndexLinkedListHead() == 0)
+                 {
+                     current_deck->clearIndexList();
+                     drawpile.popCard(choose_card);
+                     if (drawpile.isEmpty()) {
+                         winner_flag = true;
+                         break;
+                     }
+                     current_deck->drawCard(choose_card);
+                     cout << endl << endl;
+                     temp_card.displayCard();
+                     current_deck->showHandCards();
+                     current_deck->showValidCard(temp_card);
+                 }
+             }
 
-        //after getting the valid card index, use that card index to copy the card to temp card
-        current_deck->copyValidChosenCard(player_choice_card_index, choose_card);
+             cout << endl;
+             //prompt the valid card index
+             do
+             {
+                 cout << "Please play a card(choose the valid card index): ";
+                 cin >> player_choice_card_index;
+                 if (current_deck->searchIndex(player_choice_card_index) == false)
+                 {
+                     cout << "Invalid input. Please choose a valid card index\n";
+                 }
+             } while (current_deck->searchIndex(player_choice_card_index) == false);
 
-        //play that card and save that card into temp_card
-        current_deck->playCard(choose_card, temp_card);
-        current_deck->showIndexLinkedList();
-        //add score to the group
-        temp_group.addScore(temp_card.getScore());
-        groupsinplay.updateGroupScore(temp_group);
+             //after getting the valid card index, use that card index to copy the card to temp card
+             current_deck->copyValidChosenCard(player_choice_card_index, choose_card);
 
-        //after played that card, need to clear the index linked list
-        current_deck->clearIndexList();
-        //send that out card to discard pile
-        discardpile.push(temp_card);
-        // end this turn, go to the next player by repeating this loop
+             //play that card and save that card into temp_card
+             current_deck->playCard(choose_card, temp_card);
+             current_deck->showIndexLinkedList();
+             //add score to the group
+             temp_group.addScore(temp_card.getScore());
+             groupsinplay.updateGroupScore(temp_group);
 
-        // check current hand card >10, drop group
-        if (current_deck->getNumberOfHandCards() > 10) {
-            groupsinplay.RemoveGroup();
-        }
+             //after played that card, need to clear the index linked list
+             current_deck->clearIndexList();
+             //send that out card to discard pile
+             discardpile.push(temp_card);
+             // end this turn, go to the next player by repeating this loop
+         }
 
         // check winner 
         if (drawpile.isEmpty()) {

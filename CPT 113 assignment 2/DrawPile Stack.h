@@ -115,7 +115,7 @@ void DrawPileStack<C>::popCard(C& value) {
 	CardNode* Node_ptr = nullptr;
 
 	if (isEmpty()) {
-		cout << "The stack is empty" << endl;
+		cout << "The Draw Pile is now empty" << endl;
 	}
 	else {
 		// point temp pointer to the top first
