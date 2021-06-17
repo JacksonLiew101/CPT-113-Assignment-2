@@ -111,6 +111,7 @@ void DrawPileStack<C>::popCard(C& value) {
 
 	if (isEmpty()) {
 		cout << "The Draw Pile is now empty. It is end of the game!" << endl;
+		system("pause");
 	}
 	else {
 		// point temp pointer to the top first

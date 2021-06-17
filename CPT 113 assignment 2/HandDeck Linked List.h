@@ -86,13 +86,14 @@ void HandDeckLinkedList<C>::showHandCards()
 	CardNode* nodePtr = nullptr;
 	nodePtr = head;
 
+	cout << "\nThis is your current hand cards\n";
 	while (nodePtr)
 	{
 		nodePtr->value.displayCard();
 		cout << " | ";
 		nodePtr = nodePtr->next;
 	}
-	cout << endl;
+	cout << endl << endl;
 }
 
 // Show all the valid cards to be played
@@ -118,7 +119,7 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 	*/
 	nodePtr = head;
 	string Check_value = searchCard.getValue();
-	cout << "These are the cards that can be used: ";
+	cout << "These are the cards that can be used: \n";
 
 	while (!(nodePtr == nullptr))
 	{
@@ -164,6 +165,7 @@ void HandDeckLinkedList<C>::showValidCard(C searchCard)
 		}
 		nodePtr = nodePtr->next;
 	}
+	cout << endl;
 }
 
 // Find the chosen card based on index and save the card details

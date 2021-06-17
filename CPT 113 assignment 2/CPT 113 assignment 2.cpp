@@ -11,7 +11,10 @@ const int MAXIMUM_CARD_NO = 10;
 
 void Welcome();
 void Rule();
-void UpdateHandDeckPtr(Group, HandDeckLinkedList<Card> *&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+void CreateGroups(Group&, GroupDoubleCircularLinkedList<Group>&);
+void UpdateHandDeckPtr(Group&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+void InitializeAllHandDecks(Card&, Group&, GroupDoubleCircularLinkedList<Group>&, DrawPileStack<Card>&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+void StartFirstCard(Card&, DrawPileStack<Card>&, DiscardPileStack<Card>&);
 void End();
 
 int main() {
@@ -23,68 +26,18 @@ int main() {
     HandDeckLinkedList<Card>* current_deck = nullptr;
     Card temp_card, choose_card;
     Group temp_group;
-    int number_of_groups = 0, player_choice_card_index = 0;
-    string group_name, player1_name, player2_name, action;
-    string group_list = "ABCD";
+    int player_choice_card_index = 0;
+    string action;
     bool winner_flag = false; 
 
     Welcome();
     Rule();
-    do
-    {
-        cout << "Enter the number of groups to play: ";
-        cin >> number_of_groups;
-        if(number_of_groups<2 || number_of_groups> 4)
-        {
-            cout << "Invalid value. Please make sure that the number of groups is between 2 to 4\n";
-        }
-    }while(number_of_groups<2 || number_of_groups> 4);
-   
-	// create groups
-    for (int i = 0; i < number_of_groups; i++) {
-        cout << "\nEnter player 1's name for this group " << group_list[i] << ": ";
-        cin >> player1_name;
-        cout << "\nEnter player 2's name for this group " << group_list[i] << ": ";
-        cin >> player2_name;
-        group_name = group_list[i];
-        temp_group.setGroup(0, player1_name, player2_name, group_name);
-        groupsinplay.addNewGroupAtEnd(temp_group);
-    }
 
-    // initialise handdeck for each groups
-    // group now is last added group
-    for (int i = 0; i < STARTING_CARD_NO; i++) {
+    CreateGroups(temp_group, groupsinplay);
 
-        for (int j = 0; j < number_of_groups; j++) {
-            // change group before starting, first card start at first group
-            groupsinplay.NextGroup();
-
-            // change deck based on current group
-            groupsinplay.getCurrentNode(temp_group);
-            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
-
-            // add one card for each group at a time
-            drawpile.popCard(temp_card);
-            current_deck->drawCard(temp_card);
-        }
-    }
-	
+    InitializeAllHandDecks(temp_card, temp_group, groupsinplay, drawpile, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
     
-    //pop out 1 card from drawpile as starting card
-    //change the starting card if the first popped out card is action card
-    drawpile.popCard(temp_card);
-
-    if(temp_card.compareStrings(temp_card.getValue(),"Draw Two")||temp_card.compareStrings(temp_card.getValue(),"Skip")||temp_card.compareStrings(temp_card.getValue(),"Reverse"))
-    {
-        temp_card.setValue("1");
-    }
-    else if(temp_card.compareStrings(temp_card.getValue(),"Wild Draw Four")||temp_card.compareStrings(temp_card.getValue(),"Wild"))
-    {
-        temp_card.setValue("1");
-        temp_card.setColour("Red");
-    }
-    discardpile.push(temp_card);
-    
+    StartFirstCard(temp_card, drawpile, discardpile);
 
     //start game
     //before starting the card details is stored in the temp_card
@@ -139,7 +92,9 @@ int main() {
 
 
         // interface for gameplay
-        //system("cls");
+        system("cls");
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
         cout << "\t\t\t" << "Current Number Card" << endl;
         cout << "\t\t\t";
         temp_card.displayCard();
@@ -167,29 +122,30 @@ int main() {
         }
 
         cout << "\t\t\tYour turn now!\n";
+        cout << "\nCurrent Player: ";
         if (groupsinplay.getPlayerTurn() == 0) {
-            cout << temp_group.getPlayer1Name() << " from Group " << temp_group.getGroupName() << endl;
+            cout << temp_group.getPlayer1Name(); 
         }
         else {
-            cout << temp_group.getPlayer2Name() << " from Group " << temp_group.getGroupName() << endl;
+            cout << temp_group.getPlayer2Name();
         }
+        cout << " from Group " << temp_group.getGroupName() << endl;
 
          //first, show all the hand cards
-        cout << "This is your current hand cards\n";
         current_deck->showHandCards();
         cout << "\n\n";
 
          // check current hand card >10, drop group
-         if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
+        if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
              //remove the group
              groupsinplay.RemoveGroup();
              //reset the action 
              discardpile.setActionStatement("");
              //update to the remaining group
              groupsinplay.getCurrentNode(temp_group);
-         }
-         else
-         {
+        }
+        else
+        {
              //second, show all the valid cards, if still less than 10 cards
              current_deck->showValidCard(temp_card);
              while (current_deck->showIndexLinkedListHead() == 0 && !drawpile.isEmpty())
@@ -239,7 +195,10 @@ int main() {
              //send that out card to discard pile
              discardpile.push(temp_card);
              // end this turn, go to the next player by repeating this loop
-         }
+        }
+
+        cout << endl;
+        system("pause");
 
         // check winner 
         if (drawpile.isEmpty()) {
@@ -256,10 +215,15 @@ int main() {
     }
 
     // display the winners
+    system("cls");
+    cout << "\t*****************************************************************************************************************************************************" << endl
+        << endl;
     cout << "\t\t\tCongratulations\n";
-    cout << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
-    cout << "Group " << temp_group.getGroupName() << " wins the game!!!!\n";
-    cout << "With a score of " << temp_group.getScore();
+    cout << "\t\t" << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
+    cout << "\t\tGroup " << temp_group.getGroupName() << " wins the game!!!!\n";
+    cout << "\t\tWith a score of " << temp_group.getScore() << endl;
+    cout << "\t*****************************************************************************************************************************************************" << endl
+        << endl;
     system("pause");
 
     End();
@@ -317,6 +281,7 @@ void Welcome()
 
 void Rule()
 {
+    system("cls");
     cout << "\t*****************************************************************************************************************************************************" << endl
          << endl; //Greet the user
     cout << "\t\t\tThis game is a multiplayer game."  << endl
@@ -333,7 +298,37 @@ void Rule()
     system("pause");
 }
 
-void UpdateHandDeckPtr(Group temp_group, HandDeckLinkedList<Card> *&current_deck, HandDeckLinkedList<Card> &HandDeckA, HandDeckLinkedList<Card> &HandDeckB, HandDeckLinkedList<Card> &HandDeckC, HandDeckLinkedList<Card> &HandDeckD)
+void CreateGroups(Group& temp_group, GroupDoubleCircularLinkedList<Group>& groupsinplay) {
+    int Number_of_groups = 0;
+    string Group_name, Player1_name, Player2_name;
+    string Group_list = "ABCD";
+
+    // Prompt input to get every player's name
+    do
+    {
+        cout << "\n\n\t\t\tEnter the number of groups to play: ";
+        cin >> Number_of_groups;
+        // Clear input buffer
+        while (getchar() != '\n') cin.clear();
+        if (Number_of_groups < 2 || Number_of_groups > 4)
+        {
+            cout << "Invalid value. Please make sure that the number of groups is between 2 to 4\n";
+        }
+    } while (Number_of_groups < 2 || Number_of_groups > 4);
+
+    // Create groups according to the number of groups
+    for (int i = 0; i < Number_of_groups; i++) {
+        cout << "\nEnter player 1's name for this group " << Group_list[i] << ": ";
+        getline(cin, Player1_name);
+        cout << "\nEnter player 2's name for this group " << Group_list[i] << ": ";
+        getline(cin, Player2_name);
+        Group_name = Group_list[i];
+        temp_group.setGroup(0, Player1_name, Player2_name, Group_name);
+        groupsinplay.addNewGroupAtEnd(temp_group);
+    }
+}
+
+void UpdateHandDeckPtr(Group& temp_group, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD)
 {
     if (temp_group.compareStrings(temp_group.getGroupName(), "A")) {
         current_deck = &HandDeckA;
@@ -352,8 +347,51 @@ void UpdateHandDeckPtr(Group temp_group, HandDeckLinkedList<Card> *&current_deck
     }
 }
 
+void InitializeAllHandDecks(Card& temp_card, Group& temp_group, GroupDoubleCircularLinkedList<Group>& groupsinplay, DrawPileStack<Card>& drawpile, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD) {
+    
+    // Give every handdeck a total of 5 cards
+    for (int i = 0; i < STARTING_CARD_NO; i++) {
+
+        for (int j = 0; j < groupsinplay.getNoOfGroup(); j++) {
+            // change group before starting, first card start at first group
+            groupsinplay.NextGroup();
+
+            // change deck based on current group
+            groupsinplay.getCurrentNode(temp_group);
+            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+
+            // add one card for each group at a time
+            drawpile.popCard(temp_card);
+            current_deck->drawCard(temp_card);
+        }
+    }
+}
+
+// Pop out 1 card from drawpile as starting card
+// Change the starting card if the first popped out card is action card
+void StartFirstCard(Card& temp_card, DrawPileStack<Card>& drawpile, DiscardPileStack<Card>& discardpile) {
+    drawpile.popCard(temp_card);
+
+    // If first card is action card, overwrite the card to be a number card
+    if (temp_card.compareStrings(temp_card.getValue(), "Draw Two") 
+        || temp_card.compareStrings(temp_card.getValue(), "Skip") 
+        || temp_card.compareStrings(temp_card.getValue(), "Reverse"))
+    {
+        temp_card.setValue("1");
+    }
+    else if (temp_card.compareStrings(temp_card.getValue(), "Wild Draw Four") 
+        || temp_card.compareStrings(temp_card.getValue(), "Wild"))
+    {
+        temp_card.setValue("1");
+        temp_card.setColour("Red");
+    }
+
+    discardpile.push(temp_card);
+}
+
 void End()
 {
+    system("cls");
     cout << endl;  
     cout << endl;                                                                                                                                                
    cout << "\t*****************************************************************************************************************************************************" << endl

@@ -248,10 +248,12 @@ void GroupDoubleCircularLinkedList<G>::RemoveGroup() {
 	no_of_group--;
 
 	// After removal, display a message first
+	system("cls");
+	cout << "\t*****************************************************************************************************************************************************" << endl
+		<< endl;
 	cout << "\t\t\tYou Lose! You have more than 10 cards already.\n";
 	cout << "\t\t\tNice try. Good luck next time.\n";
 	cout << "\t\t\t\t\tGroup " << removed_group.getGroupName() << " is dropped out.\n";
-	system("pause");
 }
 
 // Skip the next player
