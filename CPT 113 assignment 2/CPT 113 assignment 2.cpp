@@ -15,6 +15,8 @@ void CreateGroups(Group&, GroupDoubleCircularLinkedList<Group>&);
 void UpdateHandDeckPtr(Group&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
 void InitializeAllHandDecks(Card&, Group&, GroupDoubleCircularLinkedList<Group>&, DrawPileStack<Card>&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
 void StartFirstCard(Card&, DrawPileStack<Card>&, DiscardPileStack<Card>&);
+void CheckActionCard(bool&, Card&, Group&, DrawPileStack<Card>&, DiscardPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
+void GameplayInterfaceHead(Card& temp_card, Group& temp_group, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay);
 void End();
 
 int main() {
@@ -39,101 +41,21 @@ int main() {
     
     StartFirstCard(temp_card, drawpile, discardpile);
 
-    //start game
-    //before starting the card details is stored in the temp_card
+    // Start game
     while (!winner_flag) {
         
-        // check action
-        action = discardpile.getActionStatement();
+        CheckActionCard(winner_flag, temp_card, temp_group, drawpile, discardpile, groupsinplay, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
 
-        if (action == "Reverse")
-        {
-            // change direction of the gameplay 
-            groupsinplay.reverse();
-            groupsinplay.getCurrentNode(temp_group);
-            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
-            
-        }
-        else if (action == "Skip") {
-            // skip the next player in turn
-            groupsinplay.skipTurn();
-            groupsinplay.getCurrentNode(temp_group);
-            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
-        }
-        else {
-            // for cards that don't involve changing player turns by force
-            groupsinplay.NextGroup();
-            groupsinplay.getCurrentNode(temp_group);
-            UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
-
-            if (action == "Draw Two") {
-                for (int i = 0; i < 2; i++) {
-                    drawpile.popCard(temp_card);
-                    if (drawpile.isEmpty()) {
-                        winner_flag = true;
-                    }
-                    current_deck->drawCard(temp_card);
-                }
-            }
-
-            if (action == "Wild Draw Four") {
-                for (int i = 0; i < 4; i++) {
-                    drawpile.popCard(temp_card);
-                    if (drawpile.isEmpty()) {
-                        winner_flag = true;
-                    }
-                    current_deck->drawCard(temp_card);
-                }
-            }
-        }
-        
-        // for player starts to check card, update back the card to the card at the top of discard pile first
+        // Save the top cards for later matching card
         discardpile.peek(temp_card);
 
+        GameplayInterfaceHead(temp_card, temp_group, discardpile, groupsinplay);
 
-        // interface for gameplay
-        system("cls");
-        cout << "\t*****************************************************************************************************************************************************" << endl
-            << endl;
-        cout << "\t\t\t" << "Current Number Card" << endl;
-        cout << "\t\t\t";
-        temp_card.displayCard();
-
-        // display message for action cards (if exist)
-        if (action == "Draw Two") {
-            cout << "\n\n'Draw Two' card is used. 2 cards is drawed to your hand deck\n\n";
-        }
-        else if (action == "Wild Draw Four") {
-            cout << "\n\n'Wild Draw Four' card is used. 4 cards is drawed to your hand deck.\n" 
-                 << temp_card.getColour() << " is the new colour.\n\n";
-        }
-        else if (action == "Wild") {
-            cout << "\n\n'Wild' card is used.\n"
-                << temp_card.getColour() << " is the new colour.\n\n";
-        }
-        else if (action == "Skip") {
-            cout << "\n\n'Skip' card is used. It is your turn now.\n\n";
-        }
-        else if (action == "Reverse") {
-            cout << "\n\n'Reverse' card is used. Direction is changed. It is your turn now.\n\n";
-        }
-        else {
-            cout << "\n\n";
-        }
-
-        cout << "\t\t\tYour turn now!\n";
-        cout << "\nCurrent Player: ";
-        if (groupsinplay.getPlayerTurn() == 0) {
-            cout << temp_group.getPlayer1Name(); 
-        }
-        else {
-            cout << temp_group.getPlayer2Name();
-        }
-        cout << " from Group " << temp_group.getGroupName() << endl;
 
          //first, show all the hand cards
         current_deck->showHandCards();
         cout << "\n\n";
+        
 
          // check current hand card >10, drop group
         if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
@@ -207,6 +129,20 @@ int main() {
         }
         else if (current_deck->isEmpty()) {
             winner_flag = true;
+            system("cls");
+            cout << endl;
+            cout << "\t\t\t\t\t\t8 8888      88           b.             8               ,o888888o.     \n";
+            cout << "\t\t\t\t\t\t8 8888      88           888o.          8            . 8888     `88.   \n";
+            cout << "\t\t\t\t\t\t8 8888      88           Y88888o.       8           ,8 8888       `8b  \n";
+            cout << "\t\t\t\t\t\t8 8888      88           .`Y888888o.    8           88 8888        `8b \n";
+            cout << "\t\t\t\t\t\t8 8888      88           8o. `Y888888o. 8           88 8888         88 \n";
+            cout << "\t\t\t\t\t\t8 8888      88           8`Y8o. `Y88888o8           88 8888         88 \n";
+            cout << "\t\t\t\t\t\t8 8888      88           8   `Y8o. `Y8888           88 8888        ,8P \n";
+            cout << "\t\t\t\t\t\t  8888     ,8P           8      `Y8o. `Y8           `8 8888       ,8P   \n";
+            cout << "\t\t\t\t\t\t  8888   ,d8P            8         `Y8o.`            ` 8888     ,88'    \n";
+            cout << "\t\t\t\t\t\t   `Y88888P'             8            `Yo               `8888888P'     \n";
+            cout << endl;
+            system("pause");
         }
         else if (groupsinplay.getNoOfGroup()==1) {
             winner_flag = true;
@@ -231,12 +167,13 @@ int main() {
 	return 0;
 }
 
+// Greet the user
 void Welcome()
 {
  
 
     cout << "\t*****************************************************************************************************************************************************" << endl
-         << endl; //Greet the user
+         << endl; 
     cout<<"\t\t                                                                                                   .         .                          \n";
     cout<<"\t\t `8.`888b                 ,8' 8 8888888888   8 8888         ,o888888o.        ,o888888o.           ,8.       ,8.          8 8888888888   \n";
     cout<<"\t\t  `8.`888b               ,8'  8 8888         8 8888        8888     `88.   . 8888     `88.        ,888.     ,888.         8 8888         \n";
@@ -279,11 +216,12 @@ void Welcome()
     system("pause");
 }
 
+// Explain the rules before gameplay
 void Rule()
 {
     system("cls");
     cout << "\t*****************************************************************************************************************************************************" << endl
-         << endl; //Greet the user
+         << endl; 
     cout << "\t\t\tThis game is a multiplayer game."  << endl
          << endl;
              cout << "\t\t\tSpecifically, you should have at least 2 groups of players for the gameplay and \n\t\t\teach group will involve 2 players playing the same deck."  << endl
@@ -298,6 +236,7 @@ void Rule()
     system("pause");
 }
 
+// Create number of group nodes based on user inputs
 void CreateGroups(Group& temp_group, GroupDoubleCircularLinkedList<Group>& groupsinplay) {
     int Number_of_groups = 0;
     string Group_name, Player1_name, Player2_name;
@@ -328,6 +267,7 @@ void CreateGroups(Group& temp_group, GroupDoubleCircularLinkedList<Group>& group
     }
 }
 
+// Update the pointer to point to current handdeck
 void UpdateHandDeckPtr(Group& temp_group, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD)
 {
     if (temp_group.compareStrings(temp_group.getGroupName(), "A")) {
@@ -347,20 +287,21 @@ void UpdateHandDeckPtr(Group& temp_group, HandDeckLinkedList<Card>*& current_dec
     }
 }
 
+// Initialise the handdeck by giving every handdeck a total of 5 cards
 void InitializeAllHandDecks(Card& temp_card, Group& temp_group, GroupDoubleCircularLinkedList<Group>& groupsinplay, DrawPileStack<Card>& drawpile, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD) {
     
-    // Give every handdeck a total of 5 cards
+    // Give cards to each group one at a time
     for (int i = 0; i < STARTING_CARD_NO; i++) {
 
         for (int j = 0; j < groupsinplay.getNoOfGroup(); j++) {
-            // change group before starting, first card start at first group
+            // Change group before starting, first card start at first group
             groupsinplay.NextGroup();
 
-            // change deck based on current group
+            // Change deck based on current group
             groupsinplay.getCurrentNode(temp_group);
             UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
 
-            // add one card for each group at a time
+            // Add one card to handdeck from drawpile
             drawpile.popCard(temp_card);
             current_deck->drawCard(temp_card);
         }
@@ -389,13 +330,115 @@ void StartFirstCard(Card& temp_card, DrawPileStack<Card>& drawpile, DiscardPileS
     discardpile.push(temp_card);
 }
 
+// check action and do the action first before playing cards
+void CheckActionCard(bool& winner_flag, Card& temp_card, Group& temp_group, DrawPileStack<Card>& drawpile, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD)
+{
+    string Action;
+
+    Action = discardpile.getActionStatement();
+
+    if (Action == "Reverse")
+    {
+        // Change direction of the gameplay 
+        groupsinplay.reverse();
+        groupsinplay.getCurrentNode(temp_group);
+        UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+
+    }
+    else if (Action == "Skip") {
+        // Skip the next player in turn
+        groupsinplay.skipTurn();
+        groupsinplay.getCurrentNode(temp_group);
+        UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+    }
+    else {
+        // For cards that don't involve changing player turns by force
+        groupsinplay.NextGroup();
+        groupsinplay.getCurrentNode(temp_group);
+        UpdateHandDeckPtr(temp_group, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
+
+        if (Action == "Draw Two") {
+            for (int i = 0; i < 2; i++) {
+                drawpile.popCard(temp_card);
+                // Immediately stop drawing drawing card if drawpile is empty
+                if (drawpile.isEmpty()) {
+                    winner_flag = true;
+                    break;
+                }
+                current_deck->drawCard(temp_card);
+            }
+        }
+
+        if (Action == "Wild Draw Four") {
+            for (int i = 0; i < 4; i++) {
+                drawpile.popCard(temp_card);
+                // Immediately stop drawing drawing card if drawpile is empty
+                if (drawpile.isEmpty()) {
+                    winner_flag = true;
+                    break;
+                }
+                current_deck->drawCard(temp_card);
+            }
+        }
+    }
+}
+
+// Display gameplay interface head part (upper part), including current card, action(if exists), current group player
+void GameplayInterfaceHead(Card& temp_card, Group& temp_group, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay)
+{
+    string Action;
+
+    // Display message for current number card
+    system("cls");
+    cout << "\t*****************************************************************************************************************************************************" << endl
+        << endl;
+    cout << "\t\t\t" << "Current Number Card" << endl;
+    cout << "\t\t\t";
+    temp_card.displayCard();
+
+    // Display message for action cards (if exist)
+    Action = discardpile.getActionStatement();
+    if (Action == "Draw Two") {
+        cout << "\n\n'Draw Two' card is used. 2 cards is drawed to your hand deck\n\n";
+    }
+    else if (Action == "Wild Draw Four") {
+        cout << "\n\n'Wild Draw Four' card is used. 4 cards is drawed to your hand deck.\n"
+            << temp_card.getColour() << " is the new colour.\n\n";
+    }
+    else if (Action == "Wild") {
+        cout << "\n\n'Wild' card is used.\n"
+            << temp_card.getColour() << " is the new colour.\n\n";
+    }
+    else if (Action == "Skip") {
+        cout << "\n\n'Skip' card is used. It is your turn now.\n\n";
+    }
+    else if (Action == "Reverse") {
+        cout << "\n\n'Reverse' card is used. Direction is changed. It is your turn now.\n\n";
+    }
+    else {
+        cout << "\n\n";
+    }
+
+    // Display message for current group player
+    cout << "\t\t\tYour turn now!\n";
+    cout << "\nCurrent Player: ";
+    if (groupsinplay.getPlayerTurn() == 0) {
+        cout << temp_group.getPlayer1Name();
+    }
+    else {
+        cout << temp_group.getPlayer2Name();
+    }
+    cout << " from Group " << temp_group.getGroupName() << endl;
+}
+
+// Goodbye message
 void End()
 {
     system("cls");
     cout << endl;  
     cout << endl;                                                                                                                                                
    cout << "\t*****************************************************************************************************************************************************" << endl
-         << endl; //goodbye message
+         << endl; 
     cout<<"\t8888888 8888888888 8 8888        8          .8.          b.             8 8 8888     ,88'           `8.`8888.      ,8'  ,o888888o.     8 8888      88 \n";
     cout<<"\t      8 8888       8 8888        8         .888.         888o.          8 8 8888    ,88'             `8.`8888.    ,8'. 8888     `88.   8 8888      88 \n";
     cout<<"\t      8 8888       8 8888        8        :88888.        Y88888o.       8 8 8888   ,88'               `8.`8888.  ,8',8 8888       `8b  8 8888      88 \n";
