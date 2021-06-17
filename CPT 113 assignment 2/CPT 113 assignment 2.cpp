@@ -16,7 +16,12 @@ void UpdateHandDeckPtr(Group&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Ca
 void InitializeAllHandDecks(Card&, Group&, GroupDoubleCircularLinkedList<Group>&, DrawPileStack<Card>&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
 void StartFirstCard(Card&, DrawPileStack<Card>&, DiscardPileStack<Card>&);
 void CheckActionCard(bool&, Card&, Group&, DrawPileStack<Card>&, DiscardPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&, HandDeckLinkedList<Card>*&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&, HandDeckLinkedList<Card>&);
-void GameplayInterfaceHead(Card& temp_card, Group& temp_group, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay);
+void GameplayInterfaceHead(Card&, Group&, DiscardPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&);
+void CurrentGroupLose(Group&, DiscardPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&);
+void ContinueDrawCardTillValid(bool&, Card&, Card&, DrawPileStack<Card>&, HandDeckLinkedList<Card>*&);
+void PlayValidCard(Card&, Card&, Group&, DiscardPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&, HandDeckLinkedList<Card>*&);
+void CheckWinner(bool&, Group&, DrawPileStack<Card>&, GroupDoubleCircularLinkedList<Group>&, HandDeckLinkedList<Card>*&);
+void DisplayWinner(Group& temp_group);
 void End();
 
 int main() {
@@ -28,8 +33,6 @@ int main() {
     HandDeckLinkedList<Card>* current_deck = nullptr;
     Card temp_card, choose_card;
     Group temp_group;
-    int player_choice_card_index = 0;
-    string action;
     bool winner_flag = false; 
 
     Welcome();
@@ -44,6 +47,7 @@ int main() {
     // Start game
     while (!winner_flag) {
         
+        // Check Action and determine group player's turn
         CheckActionCard(winner_flag, temp_card, temp_group, drawpile, discardpile, groupsinplay, current_deck, HandDeckA, HandDeckB, HandDeckC, HandDeckD);
 
         // Save the top cards for later matching card
@@ -51,117 +55,35 @@ int main() {
 
         GameplayInterfaceHead(temp_card, temp_group, discardpile, groupsinplay);
 
-
-         //first, show all the hand cards
+        // Show all available on hand cards first
         current_deck->showHandCards();
         cout << "\n\n";
         
-
-         // check current hand card >10, drop group
         if (current_deck->getNumberOfHandCards() > MAXIMUM_CARD_NO) {
-             //remove the group
-             groupsinplay.RemoveGroup();
-             //reset the action 
-             discardpile.setActionStatement("");
-             //update to the remaining group
-             groupsinplay.getCurrentNode(temp_group);
+            CurrentGroupLose(temp_group, discardpile, groupsinplay);
         }
         else
         {
-             //second, show all the valid cards, if still less than 10 cards
+             // Show all the valid cards, after matching with the top card from discard pile
              current_deck->showValidCard(temp_card);
-             while (current_deck->showIndexLinkedListHead() == 0 && !drawpile.isEmpty())
-             {
-                 cout << "Looks like you don't have any valid card in your hand\n";
-                 cout << "You need to draw one more card until you have at least 1 valid card\n";
-                 system("pause");
-                 if (current_deck->showIndexLinkedListHead() == 0)
-                 {
-                     current_deck->clearIndexList();
-                     drawpile.popCard(choose_card);
-                     if (drawpile.isEmpty()) {
-                         winner_flag = true;
-                         break;
-                     }
-                     current_deck->drawCard(choose_card);
-                     cout << endl << endl;
-                     current_deck->showHandCards();
-                     current_deck->showValidCard(temp_card);
-                 }
+
+             // Repeatedly draw card if no valid card to be played
+             ContinueDrawCardTillValid(winner_flag, temp_card, choose_card, drawpile, current_deck);
+
+             // If the draw card suddenly reach more than 10 break out of if else statement
+             if (current_deck->getNumberOfHandCards() > 10) {
+                 break;
              }
-
-             cout << endl;
-             //prompt the valid card index
-             do
-             {
-                 cout << "Please play a card(choose the valid card index): ";
-                 cin >> player_choice_card_index;
-                 if (current_deck->searchIndex(player_choice_card_index) == false)
-                 {
-                     cout << "Invalid input. Please choose a valid card index\n";
-                 }
-             } while (current_deck->searchIndex(player_choice_card_index) == false);
-
-             //after getting the valid card index, use that card index to copy the card to temp card
-             current_deck->copyValidChosenCard(player_choice_card_index, choose_card);
-
-             //play that card and save that card into temp_card
-             current_deck->playCard(choose_card, temp_card);
-
-             //add score to the group
-             temp_group.addScore(temp_card.getScore());
-             groupsinplay.updateGroupScore(temp_group);
-
-             //after played that card, need to clear the index linked list
-             current_deck->clearIndexList();
-             //send that out card to discard pile
-             discardpile.push(temp_card);
-             // end this turn, go to the next player by repeating this loop
+             // Prompt to choose cards and play the card to discard pile
+             else {
+                PlayValidCard(temp_card, choose_card, temp_group, discardpile, groupsinplay, current_deck);
+             }
         }
 
-        cout << endl;
-        system("pause");
-
-        // check winner 
-        if (drawpile.isEmpty()) {
-            winner_flag = true;
-            groupsinplay.findHighestScoreGroup(temp_group);
-        }
-        else if (current_deck->isEmpty()) {
-            winner_flag = true;
-            system("cls");
-            cout << endl;
-            cout << "\t\t\t\t\t\t8 8888      88           b.             8               ,o888888o.     \n";
-            cout << "\t\t\t\t\t\t8 8888      88           888o.          8            . 8888     `88.   \n";
-            cout << "\t\t\t\t\t\t8 8888      88           Y88888o.       8           ,8 8888       `8b  \n";
-            cout << "\t\t\t\t\t\t8 8888      88           .`Y888888o.    8           88 8888        `8b \n";
-            cout << "\t\t\t\t\t\t8 8888      88           8o. `Y888888o. 8           88 8888         88 \n";
-            cout << "\t\t\t\t\t\t8 8888      88           8`Y8o. `Y88888o8           88 8888         88 \n";
-            cout << "\t\t\t\t\t\t8 8888      88           8   `Y8o. `Y8888           88 8888        ,8P \n";
-            cout << "\t\t\t\t\t\t  8888     ,8P           8      `Y8o. `Y8           `8 8888       ,8P   \n";
-            cout << "\t\t\t\t\t\t  8888   ,d8P            8         `Y8o.`            ` 8888     ,88'    \n";
-            cout << "\t\t\t\t\t\t   `Y88888P'             8            `Yo               `8888888P'     \n";
-            cout << endl;
-            system("pause");
-        }
-        else if (groupsinplay.getNoOfGroup()==1) {
-            winner_flag = true;
-        }
-
+        CheckWinner(winner_flag, temp_group, drawpile, groupsinplay, current_deck);
     }
 
-    // display the winners
-    system("cls");
-    cout << "\t*****************************************************************************************************************************************************" << endl
-        << endl;
-    cout << "\t\t\tCongratulations\n";
-    cout << "\t\t" << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
-    cout << "\t\tGroup " << temp_group.getGroupName() << " wins the game!!!!\n";
-    cout << "\t\tWith a score of " << temp_group.getScore() << endl;
-    cout << "\t*****************************************************************************************************************************************************" << endl
-        << endl;
-    system("pause");
-
+    DisplayWinner(temp_group);
     End();
   
 	return 0;
@@ -170,8 +92,6 @@ int main() {
 // Greet the user
 void Welcome()
 {
- 
-
     cout << "\t*****************************************************************************************************************************************************" << endl
          << endl; 
     cout<<"\t\t                                                                                                   .         .                          \n";
@@ -330,7 +250,7 @@ void StartFirstCard(Card& temp_card, DrawPileStack<Card>& drawpile, DiscardPileS
     discardpile.push(temp_card);
 }
 
-// check action and do the action first before playing cards
+// Check action and do the action first before playing cards
 void CheckActionCard(bool& winner_flag, Card& temp_card, Group& temp_group, DrawPileStack<Card>& drawpile, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay, HandDeckLinkedList<Card>*& current_deck, HandDeckLinkedList<Card>& HandDeckA, HandDeckLinkedList<Card>& HandDeckB, HandDeckLinkedList<Card>& HandDeckC, HandDeckLinkedList<Card>& HandDeckD)
 {
     string Action;
@@ -429,6 +349,144 @@ void GameplayInterfaceHead(Card& temp_card, Group& temp_group, DiscardPileStack<
         cout << temp_group.getPlayer2Name();
     }
     cout << " from Group " << temp_group.getGroupName() << endl;
+}
+
+// Remove current group which lose and point to the next remaining group
+void CurrentGroupLose(Group& temp_group, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay)
+{
+    // Remove the group
+    groupsinplay.RemoveGroup();
+
+    // Reset the action, to avoid carry forward to next player
+    discardpile.setActionStatement("");
+
+    // Update the temp group to the next remaining group
+    groupsinplay.getCurrentNode(temp_group);
+}
+
+// Continue to draw card until handdeck has valid cards to be playerd
+void ContinueDrawCardTillValid(bool& winner_flag, Card& temp_card, Card& choose_card, DrawPileStack<Card>& drawpile, HandDeckLinkedList<Card>*& current_deck)
+{
+    while (current_deck->showIndexLinkedListHead() == 0 && !drawpile.isEmpty())
+    {
+        cout << "Looks like you don't have any valid card in your hand\n";
+        cout << "You need to draw one more card until you have at least 1 valid card\n";
+        system("pause");
+        if (current_deck->showIndexLinkedListHead() == 0)
+        {
+            current_deck->clearIndexList();
+            drawpile.popCard(choose_card);
+            if (drawpile.isEmpty()) {
+                winner_flag = true;
+                break;
+            }
+            current_deck->drawCard(choose_card);
+            cout << endl << endl;
+            current_deck->showHandCards();
+            current_deck->showValidCard(temp_card);
+        }
+        if (current_deck->getNumberOfHandCards() > 10) {
+            break;
+        }
+    }
+}
+
+// Prompt user to pick a card and play the card
+void PlayValidCard(Card& temp_card, Card& choose_card, Group& temp_group, DiscardPileStack<Card>& discardpile, GroupDoubleCircularLinkedList<Group>& groupsinplay, HandDeckLinkedList<Card>*& current_deck)
+{
+    int Player_choice_card_index = 0;
+
+    // Prompt the valid card index
+    do
+    {
+        cout << "\nPlease play a card(choose the valid card index): ";
+        cin >> Player_choice_card_index;
+        if (current_deck->searchIndex(Player_choice_card_index) == false)
+        {
+            cout << "Invalid input. Please choose a valid card index\n";
+        }
+    } while (current_deck->searchIndex(Player_choice_card_index) == false);
+
+    // Play the card to discard pile
+
+    // After getting the valid card index, use that card index to copy the card details to choose card
+    current_deck->copyValidChosenCard(Player_choice_card_index, choose_card);
+
+    // Play that card and save that card into temp_card
+    current_deck->playCard(choose_card, temp_card);
+
+    // Add score to the group
+    temp_group.addScore(temp_card.getScore());
+    groupsinplay.updateGroupScore(temp_group);
+
+    // After played that card, clear the index linked list to prepare for next round
+    current_deck->clearIndexList();
+
+    // Send that card to discard pile
+    discardpile.push(temp_card);
+
+    cout << endl;
+    system("pause");
+}
+
+// Check the winning condition and save the winner group
+void CheckWinner(bool& winner_flag, Group& temp_group, DrawPileStack<Card>& drawpile, GroupDoubleCircularLinkedList<Group>& groupsinplay, HandDeckLinkedList<Card>*& current_deck)
+{
+    if (drawpile.isEmpty()) {
+        winner_flag = true;
+        groupsinplay.findHighestScoreGroup(temp_group);
+        system("cls");
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        cout << "\t\t\t\t\tDraw Pile is already empty. Winner is now determined.\n\n";
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        system("pause");
+    }
+    else if (current_deck->isEmpty()) {
+        winner_flag = true;
+        system("cls");
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        cout << "\t\t\t\t\t\t8 8888      88           b.             8               ,o888888o.     \n";
+        cout << "\t\t\t\t\t\t8 8888      88           888o.          8            . 8888     `88.   \n";
+        cout << "\t\t\t\t\t\t8 8888      88           Y88888o.       8           ,8 8888       `8b  \n";
+        cout << "\t\t\t\t\t\t8 8888      88           .`Y888888o.    8           88 8888        `8b \n";
+        cout << "\t\t\t\t\t\t8 8888      88           8o. `Y888888o. 8           88 8888         88 \n";
+        cout << "\t\t\t\t\t\t8 8888      88           8`Y8o. `Y88888o8           88 8888         88 \n";
+        cout << "\t\t\t\t\t\t8 8888      88           8   `Y8o. `Y8888           88 8888        ,8P \n";
+        cout << "\t\t\t\t\t\t  8888     ,8P           8      `Y8o. `Y8           `8 8888       ,8P   \n";
+        cout << "\t\t\t\t\t\t  8888   ,d8P            8         `Y8o.`            ` 8888     ,88'    \n";
+        cout << "\t\t\t\t\t\t   `Y88888P'             8            `Yo               `8888888P'     \n";
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        system("pause");
+    }
+    else if (groupsinplay.getNoOfGroup() == 1) {
+        winner_flag = true;
+        system("cls");
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        cout << "\t\t\t\t\tOnly one group left in the gameplay. Winner is now determined.\n\n";
+        cout << "\t*****************************************************************************************************************************************************" << endl
+            << endl;
+        system("pause");
+    }
+}
+
+// Display all the details of the winner group
+void DisplayWinner(Group& temp_group)
+{
+    system("cls");
+    cout << "\t*****************************************************************************************************************************************************" << endl
+        << endl;
+    cout << "\t\t\t\tCongratulations\n";
+    cout << "\t\t\t" << temp_group.getPlayer1Name() << " and " << temp_group.getPlayer2Name() << " from\n";
+    cout << "\t\t\tGroup " << temp_group.getGroupName() << " wins the game!!!!\n";
+    cout << "\t\t\tWith a score of " << temp_group.getScore() << endl;
+    cout << "\t*****************************************************************************************************************************************************" << endl
+        << endl;
+    system("pause");
 }
 
 // Goodbye message

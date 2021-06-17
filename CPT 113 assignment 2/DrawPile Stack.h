@@ -110,7 +110,7 @@ void DrawPileStack<C>::popCard(C& value) {
 	CardNode* Node_ptr = nullptr;
 
 	if (isEmpty()) {
-		cout << "The Draw Pile is now empty. It is end of the game!" << endl;
+		cout << "\nThe Draw Pile is now empty. It is end of the game!" << endl;
 		system("pause");
 	}
 	else {
